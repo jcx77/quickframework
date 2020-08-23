@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<link rel="shortcut icon" href="../img/favicon.ico" />
+<link rel="stylesheet" href="../lib/layuiadmin/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../lib/layuiadmin/style/admin.css" media="all">
+</head>
+<body class="layui-layout-body">
+	<div id="LAY_app">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<!-- 头部区域 -->
+				<ul class="layui-nav layui-layout-left">
+					<li class="layui-nav-item layadmin-flexible" lay-unselect>
+						<a href="javascript:;" layadmin-event="flexible">
+							<i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+						</a>
+					</li>
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:;" layadmin-event="refresh">
+							<i class="layui-icon layui-icon-refresh-3"></i>
+						</a>
+					</li>
+				</ul>
+				<ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:;" layadmin-event="theme">
+							<i class="layui-icon layui-icon-theme"></i>
+						</a>
+					</li>
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:;" layadmin-event="fullscreen">
+							<i class="layui-icon layui-icon-screen-full"></i>
+						</a>
+					</li>
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:;">
+							<cite id="loginOrgan"></cite>
+						</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a layadmin-event="organ">切换机构</a>
+							</dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:;">
+							<cite id="loginUser"></cite>
+						</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a layadmin-event="password">修改密码</a>
+							</dd>
+							<hr>
+							<dd layadmin-event="logout" style="text-align: center;">
+								<a>退出</a>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+			<!-- 侧边菜单 -->
+			<div class="layui-side layui-side-menu">
+				<div class="layui-side-scroll">
+					<div class="layui-logo" lay-href="console.html">
+						<span id="project"></span>
+					</div>
+					<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu"></ul>
+				</div>
+			</div>
+			<!-- 页面标签 -->
+			<div class="layadmin-pagetabs" id="LAY_app_tabs">
+				<div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+				<div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+				<div class="layui-icon layadmin-tabs-control layui-icon-down">
+					<ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+						<li class="layui-nav-item" lay-unselect>
+							<a href="javascript:;"></a>
+							<dl class="layui-nav-child layui-anim-fadein">
+								<dd layadmin-event="closeThisTabs">
+									<a href="javascript:;">关闭当前标签页</a>
+								</dd>
+								<dd layadmin-event="closeOtherTabs">
+									<a href="javascript:;">关闭其它标签页</a>
+								</dd>
+								<dd layadmin-event="closeAllTabs">
+									<a href="javascript:;">关闭全部标签页</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+				</div>
+				<div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+					<ul class="layui-tab-title" id="LAY_app_tabsheader">
+						<li lay-id="console.html" lay-attr="console.html" class="layui-this">
+							<i class="layui-icon layui-icon-home"></i>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 主体内容 -->
+			<div class="layui-body" id="LAY_app_body">
+				<div class="layadmin-tabsbody-item layui-show">
+					<iframe src="console.html" frameborder="0" class="layadmin-iframe"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script id="mm" type="text/html">
+		{{#  layui.each(d, function(index, item){ }}
+		<li data-name="{{ item.id }}" class="layui-nav-item">
+			<a href="javascript:;" lay-tips="{{ item.text }}" lay-direction="2">
+				<i class="layui-icon {{ item.iconCls }}"></i> <cite>{{ item.text }}</cite>
+			</a>
+			{{#  if(item.children){ }}
+			<dl class="layui-nav-child">
+				{{#  layui.each(item.children, function(index, item){ }}
+				{{#  if(item.children){ }}
+				<dd data-name="{{ item.id }}">
+					<a href="javascript:;">{{ item.text }}</a>
+					<dl class="layui-nav-child">
+						{{#  layui.each(item.children, function(index, item){ }}
+							<dd data-name="{{ item.id }}">
+								<a lay-href="{{ item.url }}">{{ item.text }}</a>
+							</dd>
+						{{#  }); }}
+					</dl>
+				</dd>
+				{{#  }else{  }}
+				<dd data-name="{{ item.id }}">
+					<a lay-href="{{ item.url }}">{{ item.text }}</a>
+				</dd>
+				{{#  } }}
+				{{#  }); }}
+			</dl>
+			{{#  } }}
+		</li>
+		{{#  }); }}
+	</script>
+	<script src="../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../lib/layuiadmin/'
+		}).extend({
+			index : 'lib/index',
+			common : 'js/common',
+			shiro : 'js/shiro',
+			token : 'js/token'
+		}).use([ 'index', 'common', 'shiro', 'token' ], function() {
+			layui.$.session.setParam(layui.$.http.getJSON('/api/core/param'));
+			layui.$('#project').text(layui.$.session.getParam().project);
+			layui.$(document).attr("title", layui.$.session.getParam().project);
+			layui.$.session.setLoginUser(layui.$.http.getJSON('/api/core/loginUser'));
+			//layui.$('#loginUser').text(layui.$.session.getLoginUser().name);
+			//layui.$('#loginOrgan').text(layui.$.session.getLoginUser().organName);
+			//var data = layui.$.util.toTree(layui.$.session.getLoginUser().menu);
+			//var getTpl = mm.innerHTML, view = document.getElementById('LAY-system-side-menu');
+			//layui.laytpl(getTpl).render(data, function(html) {
+			//	view.innerHTML = html;
+			//});
+			//layui.element.render('nav');
+			layui.admin.events.organ = function() {
+				layui.$.gui.open({
+					title : layui.$(this).text(),
+					url : 'organ.html',
+					width : 500,
+					height : 300
+				});
+			};
+			layui.admin.events.password = function() {
+				layui.$.gui.open({
+					title : layui.$(this).text(),
+					url : 'password.html',
+					width : 500,
+					height : 300
+				});
+			};
+			layui.admin.events.logout = function() {
+				layui.$.gui.confirm('确定退出系统', function() {
+					layui.$.gui.toLogin();
+				});
+			};
+		});
+	</script>
+</body>
+</html>

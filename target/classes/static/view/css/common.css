@@ -1,0 +1,93 @@
+.readonly {
+	background-color: #FCFCFC
+}
+
+.bg-color {
+	background-color: #F2F2F2;
+}
+
+.layui-fluid {
+	padding: 20px;
+}
+
+.layui-layout-admin .layui-footer {
+	padding: 10px;
+	text-align: center;
+	left: 0;
+	background: #FFFFFF;
+	border-top: 1px #E6E6E6 solid;
+	height: auto;
+	line-height: 100%;
+}
+
+.layui-table-tool {
+	background: #FFFFFF;
+	padding: 8px 15px;
+}
+
+.layui-table, .layui-table-view {
+	margin: 0;
+}
+
+.layui-btn-sm {
+	padding: 0 18px;
+	font-size: 14px;
+	height: 32px;
+	line-height: 32px;
+}
+
+.layui-btn-xs {
+	padding: 0 10px;
+	font-size: 14px;
+	height: 24px;
+	line-height: 24px;
+}
+
+.layui-card-header-auto {
+	padding: 10px 15px;
+	height: auto;
+	line-height: 100%;
+	border-color: #E6E6E6;
+}
+
+.btn-group {
+	height: 35px;
+	padding-top: 3px;
+}
+
+.tree-crad {
+	border: 1px #E6E6E6 solid;
+	margin-bottom: 20px;
+}
+
+.row-crad {
+	margin-bottom: 15px;
+}
+
+.treegrid-toolbar {
+	background-color: #FFFFFF;
+	padding: 8px 15px;
+	height: 33px;
+	border-top: 1px #E6E6E6 solid;
+	border-left: 1px #E6E6E6 solid;
+	border-right: 1px #E6E6E6 solid;
+}
+
+.treegrid-toolbar .layui-inline {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	color: #333;
+	border: 1px solid #999;
+	text-align: center;
+	margin: 3px 3px;
+	cursor: pointer;
+}
+
+.ztree * {
+	font-size: 14px;
+}
+
+.layui-textarea {
+	resize: none;
+}
