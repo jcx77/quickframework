@@ -14,7 +14,7 @@
 		where delete_flag='0'
 		and id_=#{id}
 	</select>
-	<select id="findResourceAll" resultType="org.sevensoft.jrdp.commons.shiro.subject.Resource">
+	<select id="findResourceAll" resultType="com.zxc.toolsproject.commons.shiro.subject.Resource">
 		select id_ "id",
 		name_ "name",
 		icon_ "icon",
@@ -25,7 +25,7 @@
 		where show_='1'
 		order by sort_
 	</select>
-	<select id="findResourceById" resultType="org.sevensoft.jrdp.commons.shiro.subject.Resource">
+	<select id="findResourceById" resultType="com.zxc.toolsproject.commons.shiro.subject.Resource">
 		select distinct id_ "id",
 		name_ "name",
 		icon_ "icon",
