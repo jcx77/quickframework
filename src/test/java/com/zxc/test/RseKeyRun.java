@@ -13,7 +13,7 @@ public class RseKeyRun {
     public static void main(String[] args) throws Exception {
         // TODO Auto-generated method stub
 
-        KeyPair keyPair = genKeyPair(2048);
+        KeyPair keyPair = genKeyPair(512);
 
         //获取公钥，并以base64格式打印出来
         PublicKey publicKey = keyPair.getPublic();
