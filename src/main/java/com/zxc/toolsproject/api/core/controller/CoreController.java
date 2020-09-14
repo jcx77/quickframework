@@ -3,6 +3,7 @@ package com.zxc.toolsproject.api.core.controller;
 import com.zxc.toolsproject.api.core.model.SysUser;
 import com.zxc.toolsproject.api.core.service.CoreService;
 import com.zxc.toolsproject.api.core.vo.param.LoginParam;
+import com.zxc.toolsproject.api.core.vo.param.PasswordParam;
 import com.zxc.toolsproject.api.core.vo.result.LoginResult;
 import com.zxc.toolsproject.api.core.vo.result.LoginUserResult;
 import com.zxc.toolsproject.api.core.vo.ui.Param;
@@ -16,9 +17,12 @@ import com.zxc.toolsproject.commons.shiro.tools.ShiroTools;
 import com.zxc.toolsproject.commons.utils.JwtUtils;
 import com.zxc.toolsproject.commons.utils.RsaUtils;
 import com.zxc.toolsproject.commons.vo.response.ResponseResult;
+import com.zxc.toolsproject.commons.vo.ui.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -56,7 +60,26 @@ public class CoreController {
         AuditTools.setUserId(sysUser.getId());
         return new ResponseResult<>("登录成功", loginResult);
     }
-
+    @AutoLog(value = "修改登录密码")
+    @RequestMapping(value = "/password", method = RequestMethod.POST)
+    public ResponseResult<LoginResult> password(@RequestBody @Validated PasswordParam passwordParam) {
+        String oldPassword = RsaUtils.decrypt(passwordParam.getOldPassword());
+        if (oldPassword == null) {
+            throw new WebException("当前密码无效");
+        }
+        String newPassword = RsaUtils.decrypt(passwordParam.getNewPassword());
+        if (newPassword == null) {
+            throw new WebException("新密码无效");
+        }
+        ShiroUser shiroUser = ShiroTools.getShiroUser();
+        if (!shiroUser.getPassword().equals(ShiroTools.md5(oldPassword, shiroUser.getId()))) {
+            throw new WebException("当前密码输入错误");
+        }
+        String password = coreService.updatePassword(shiroUser.getId(), newPassword);
+        LoginResult loginResult = new LoginResult();
+        loginResult.setToken(JwtUtils.sign(shiroUser.getId(), password));
+        return new ResponseResult<LoginResult>(loginResult);
+    }
 
     @AutoLog(value = "刷新令牌")
     @RequestMapping(value = "/token", method = RequestMethod.GET)
@@ -64,14 +87,14 @@ public class CoreController {
         ShiroUser shiroUser = ShiroTools.getShiroUser();
         LoginResult loginResult = new LoginResult();
         loginResult.setToken(JwtUtils.sign(shiroUser.getId(), shiroUser.getPassword(), VALIDITY_TIME));
-        return new ResponseResult<LoginResult>(loginResult);
+        return new ResponseResult<>(loginResult);
     }
 
 
     @AutoLog(value = "获取登录用户")
     @RequestMapping(value = "/loginUser", method = RequestMethod.GET)
     public ResponseResult<LoginUserResult> loginUser() {
-        return new ResponseResult<LoginUserResult>(new LoginUserResult(ShiroTools.getShiroUser()));
+        return new ResponseResult<>(new LoginUserResult(ShiroTools.getShiroUser()));
     }
 
     @AutoLog(value = "获取系统参数")
@@ -85,6 +108,16 @@ public class CoreController {
     }
 
 
+    @AutoLog(value = "查询数据字典")
+    @RequestMapping(value = "/option/{dictId}", method = RequestMethod.GET)
+    public ResponseResult<List<Option>> option(@PathVariable String dictId) {
+        return new ResponseResult<List<Option>>(coreService.findOption(dictId));
+    }
 
+    @AutoLog(value = "查询所有数据字典")
+    @RequestMapping(value = "/option/all/{dictId}", method = RequestMethod.GET)
+    public ResponseResult<List<Option>> optionAll(@PathVariable String dictId) {
+        return new ResponseResult<List<Option>>(coreService.findOptionAll(dictId));
+    }
 
 }

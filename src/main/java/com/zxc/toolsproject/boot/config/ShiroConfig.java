@@ -21,79 +21,79 @@ import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//@Configuration
+@Configuration
 public class ShiroConfig {
-//	@Bean
-//	public SubjectFactory subjectFactory() {
-//		return new JwtWebSubjectFactory();
-//	}
-//
-//	@Bean
-//	public SessionStorageEvaluator sessionStorageEvaluator() {
-//		DefaultSessionStorageEvaluator sessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-//		sessionStorageEvaluator.setSessionStorageEnabled(false);
-//		return sessionStorageEvaluator;
-//	}
-//
-//	@Bean
-//	public SubjectDAO subjectDAO(SessionStorageEvaluator sessionStorageEvaluator) {
-//		DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
-//		subjectDAO.setSessionStorageEvaluator(sessionStorageEvaluator);
-//		return subjectDAO;
-//	}
-//
-//	@Bean
-//	public SessionManager sessionManager() {
-//		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-//		sessionManager.setSessionValidationSchedulerEnabled(false);
-//		return sessionManager;
-//	}
-//
-//	@Bean
-//	public Realm realm() {
-//		return new JwtRealm();
-//	}
-//
-//	@Bean
-//	public SecurityManager securityManager(SubjectFactory subjectFactory, SubjectDAO subjectDAO, SessionManager sessionManager, Realm realm) {
-//		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-//		securityManager.setSubjectFactory(subjectFactory);
-//		securityManager.setSubjectDAO(subjectDAO);
-//		securityManager.setSessionManager(sessionManager);
-//		securityManager.setRealm(realm);
-//		return securityManager;
-//	}
-//
-//	@Bean
-//	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-//		return new LifecycleBeanPostProcessor();
-//	}
-//
-//	@Bean
-//	public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-//		DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-//		defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
-//		return defaultAdvisorAutoProxyCreator;
-//	}
-//
-//	@Bean
-//	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-//		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-//		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-//		return authorizationAttributeSourceAdvisor;
-//	}
-//
-//	@Bean
-//	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-//		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-//		shiroFilterFactoryBean.setSecurityManager(securityManager);
-//		Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
-//		filters.put("jwt", new JwtFilter());
-//		shiroFilterFactoryBean.setFilters(filters);
-//		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-//		filterChainDefinitionMap.put("/api/core/login", "anon");
-//		filterChainDefinitionMap.put("/api/**", "jwt");
-//		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-//		return shiroFilterFactoryBean;
-//	}
+	@Bean
+	public SubjectFactory subjectFactory() {
+		return new JwtWebSubjectFactory();
+	}
+
+	@Bean
+	public SessionStorageEvaluator sessionStorageEvaluator() {
+		DefaultSessionStorageEvaluator sessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+		sessionStorageEvaluator.setSessionStorageEnabled(false);
+		return sessionStorageEvaluator;
+	}
+
+	@Bean
+	public SubjectDAO subjectDAO(SessionStorageEvaluator sessionStorageEvaluator) {
+		DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+		subjectDAO.setSessionStorageEvaluator(sessionStorageEvaluator);
+		return subjectDAO;
+	}
+
+	@Bean
+	public SessionManager sessionManager() {
+		DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+		sessionManager.setSessionValidationSchedulerEnabled(false);
+		return sessionManager;
+	}
+
+	@Bean
+	public Realm realm() {
+		return new JwtRealm();
+	}
+
+	@Bean
+	public SecurityManager securityManager(SubjectFactory subjectFactory, SubjectDAO subjectDAO, SessionManager sessionManager, Realm realm) {
+		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+		securityManager.setSubjectFactory(subjectFactory);
+		securityManager.setSubjectDAO(subjectDAO);
+		securityManager.setSessionManager(sessionManager);
+		securityManager.setRealm(realm);
+		return securityManager;
+	}
+
+	@Bean
+	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+		return new LifecycleBeanPostProcessor();
+	}
+
+	@Bean
+	public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+		DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+		defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
+		return defaultAdvisorAutoProxyCreator;
+	}
+
+	@Bean
+	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+		return authorizationAttributeSourceAdvisor;
+	}
+
+	@Bean
+	public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+		shiroFilterFactoryBean.setSecurityManager(securityManager);
+		Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+		filters.put("jwt", new JwtFilter());
+		shiroFilterFactoryBean.setFilters(filters);
+		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+		filterChainDefinitionMap.put("/api/core/login", "anon");
+		filterChainDefinitionMap.put("/api/**", "jwt");
+		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+		return shiroFilterFactoryBean;
+	}
 }

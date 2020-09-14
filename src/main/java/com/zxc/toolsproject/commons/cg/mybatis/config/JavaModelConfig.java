@@ -3,6 +3,13 @@ package com.zxc.toolsproject.commons.cg.mybatis.config;
 public class JavaModelConfig {
 	private String targetPackage;
 
+	public JavaModelConfig() {
+	}
+
+	public JavaModelConfig(String targetPackage) {
+		this.targetPackage = targetPackage;
+	}
+
 	public String getTargetPackage() {
 		return targetPackage;
 	}

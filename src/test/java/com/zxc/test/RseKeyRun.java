@@ -13,7 +13,7 @@ public class RseKeyRun {
     public static void main(String[] args) throws Exception {
         // TODO Auto-generated method stub
 
-        KeyPair keyPair = genKeyPair(512);
+        KeyPair keyPair = genKeyPair(128);
 
         //获取公钥，并以base64格式打印出来
         PublicKey publicKey = keyPair.getPublic();
@@ -35,7 +35,7 @@ public class RseKeyRun {
     //生成密钥对
     public static KeyPair genKeyPair(int keyLength) throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
+        keyPairGenerator.initialize(512);
         return keyPairGenerator.generateKeyPair();
     }
 

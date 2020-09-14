@@ -3,6 +3,13 @@ package com.zxc.toolsproject.commons.cg.mybatis.config;
 public class XmlMapperConfig {
 	private String targetPackage;
 
+	public XmlMapperConfig() {
+	}
+
+	public XmlMapperConfig(String targetPackage) {
+		this.targetPackage = targetPackage;
+	}
+
 	public String getTargetPackage() {
 		return targetPackage;
 	}

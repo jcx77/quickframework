@@ -15,25 +15,9 @@
 			<form id="fm" class="layui-form layui-form-pane">
 				<div class="layui-row layui-col-space15">
 					<div class="layui-col-md12">
-						<label class="layui-form-label">当前密码</label>
+						<label class="layui-form-label">选择机构</label>
 						<div class="layui-input-block">
-							<input id="oldPassword" class="layui-input" type="password" lay-verify="required">
-						</div>
-					</div>
-				</div>
-				<div class="layui-row layui-col-space15">
-					<div class="layui-col-md12">
-						<label class="layui-form-label">新密码</label>
-						<div class="layui-input-block">
-							<input id="newPassword" class="layui-input" type="password" lay-verify="required">
-						</div>
-					</div>
-				</div>
-				<div class="layui-row layui-col-space15">
-					<div class="layui-col-md12">
-						<label class="layui-form-label">确认密码</label>
-						<div class="layui-input-block">
-							<input type="password" lay-verify="required|equals" ref="newPassword" class="layui-input">
+							<div id="organId"></div>
 						</div>
 					</div>
 				</div>
@@ -47,26 +31,42 @@
 			</form>
 		</div>
 	</div>
-	<script src="../lib/rsa/jsencrypt.js"></script>
 	<script src="../lib/layuiadmin/layui/layui.js"></script>
 	<script src="../js/config.js"></script>
 	<script>
 		layui.config({
 			base : '../lib/layuiadmin/'
 		}).extend({
+			xmSelect : 'lib/extend/xm-select',
 			common : 'js/common',
 			shiro : 'js/shiro'
-		}).use([ 'common', 'shiro' ], function() {
+		}).use([ 'xmSelect', 'common', 'shiro' ], function() {
+			var organId = layui.xmSelect.render({
+				el : '#organId',
+				radio : true,
+				clickClose : true,
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					value : 'id',
+				},
+				layVerify : 'required',
+				data : layui.$.http.getJSON('/api/core/organ')
+			});
+			organId.setValue([ layui.$.session.getLoginUser().organId ]);
 			layui.form.on('submit(apply)', function(data) {
-				layui.$.http.post({
-					url : '/api/core/password',
-					data : {
-						oldPassword : layui.$.rsa.encrypt(layui.$('#oldPassword').val()),
-						newPassword : layui.$.rsa.encrypt(layui.$('#newPassword').val())
-					},
+				if (organId.getValue('value')[0] == layui.$.session.getLoginUser().organId) {
+					layui.$.gui.close();
+					return false;
+				}
+				layui.$.get({
+					url : '/api/core/organ/' + organId.getValue('value'),
 					success : function(data) {
 						layui.$.gui.handle(data, function() {
-							layui.$.session.setToken(data.result.token);
+							parent.layui.$.gui.reload();
 							layui.$.gui.close();
 						});
 					}

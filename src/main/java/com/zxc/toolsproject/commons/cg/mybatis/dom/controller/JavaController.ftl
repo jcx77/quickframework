@@ -2,9 +2,9 @@ package ${data.packageName};
 
 import ${data.javaModel.packageName}.${data.javaModel.className};
 import ${data.serviceName}.${data.serviceClassName};
-import org.zxc.tools.commons.vo.response.Response;
-import org.zxc.tools.commons.vo.response.ResponseResult;
-import org.zxc.tools.commons.vo.ui.PageList;
+import com.zxc.toolsproject.commons.vo.response.Response;
+import com.zxc.toolsproject.commons.vo.response.ResponseResult;
+import com.zxc.toolsproject.commons.vo.ui.PageList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +37,7 @@ public class ${data.className} {
     /**
     * @Description: TODO()
     * @Param: [${data.javaModel.lowerClassName}]
-    * @return: org.sevensoft.jrdp.commons.vo.response.Response
+    * @return:
     * @Author: xxx
     * @Date: ${data.date}
     */
@@ -66,7 +66,7 @@ public class ${data.className} {
     /**
     * @Description: TODO( 更新 )
     * @Param: [  ]
-    * @return: org.sevensoft.jrdp.commons.vo.response.Response
+    * @return:
     * @Author: xxx
     * @Date: ${data.date}
     */
@@ -82,7 +82,7 @@ public class ${data.className} {
     /**
     * @Description: TODO(  )
     * @Param: [ id ]
-    * @return: org.sevensoft.jrdp.commons.vo.response.Response
+    * @return:
     * @Author: xxx
     * @Date: ${data.date}
     */

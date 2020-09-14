@@ -1,11 +1,11 @@
-package com.zxc.toolsproject.api.app.test.controller;
+package com.zxc.toolsproject.api.sys.controller;
 
-import com.zxc.toolsproject.api.app.test.model.Test;
-import com.zxc.toolsproject.api.app.test.service.TestService;
-
+import com.zxc.toolsproject.api.sys.model.SysDict;
+import com.zxc.toolsproject.api.sys.service.SysDictService;
 import com.zxc.toolsproject.commons.vo.response.Response;
 import com.zxc.toolsproject.commons.vo.response.ResponseResult;
 import com.zxc.toolsproject.commons.vo.ui.PageList;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,40 +13,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
-@RequestMapping(value = "/api/xxx/xxx")
-public class TestController {
+@RequestMapping(value = "/api/sys/dict")
+public class SysDictController {
 
     @Autowired
-    private TestService testService;
+    private SysDictService sysDictService;
 
     /**
     * @Description: TODO(  )
     * @Param: [  ]
-    * @return: Test
+    * @return: SysDict
     * @Author: xxx
-    * @Date: 2020-08-03 10:22:11
+    * @Date: 2020-09-13 21:02:16
     */
-    //@AutoLog(value = "查询门类")
     @RequestMapping(value = "/find")
-    public ResponseResult<PageList<Test>> find() {
-        return new ResponseResult<>(new PageList<>(testService.find()));
+    public ResponseResult<List<SysDict>> find() {
+        return new ResponseResult<>(sysDictService.find());
     }
 
 
     /**
     * @Description: TODO()
-    * @Param: [test]
+    * @Param: [sysDict]
     * @return: org.sevensoft.jrdp.commons.vo.response.Response
     * @Author: xxx
-    * @Date: 2020-08-03 10:22:11
+    * @Date: 2020-09-13 21:02:16
     */
-    //@AutoLog(value = "添加门类")
     @RequestMapping(value = "/insert")
-    //@RequiresPermissions("mlb:insert")
-    public Response insert(@RequestBody @Validated Test test) {
-        testService.insert(test);
+    //@RequiresPermissions("dict:insert")
+    public Response insert(@RequestBody @Validated SysDict sysDict) {
+        sysDictService.insert(sysDict);
         return Response.success();
     }
 
@@ -54,14 +54,13 @@ public class TestController {
     /**
     * @Description: TODO( 获取 )
     * @Param: [ id ]
-    * @return: Test
+    * @return: SysDict
     * @Author: xxx
-    * @Date: 2020-08-03 10:22:11
+    * @Date: 2020-09-13 21:02:16
     */
-    //@AutoLog(value = "获取门类")
     @RequestMapping(value = "/get/{id}")
-    public ResponseResult<Test> get(@PathVariable String id) {
-        return new ResponseResult<>(testService.get(id));
+    public ResponseResult<SysDict> get(@PathVariable String id) {
+        return new ResponseResult<>(sysDictService.get(id));
     }
 
     /**
@@ -69,13 +68,12 @@ public class TestController {
     * @Param: [  ]
     * @return: org.sevensoft.jrdp.commons.vo.response.Response
     * @Author: xxx
-    * @Date: 2020-08-03 10:22:11
+    * @Date: 2020-09-13 21:02:16
     */
-    //@AutoLog(value = "更新门类")
     @RequestMapping(value = "/update")
-    //@RequiresPermissions("zddyb:update")
-    public Response update(@RequestBody @Validated Test test) {
-        testService.update(test);
+    @RequiresPermissions("dict:update")
+    public Response update(@RequestBody @Validated SysDict sysDict) {
+        sysDictService.update(sysDict);
         return Response.success();
     }
 
@@ -85,12 +83,12 @@ public class TestController {
     * @Param: [ id ]
     * @return: org.sevensoft.jrdp.commons.vo.response.Response
     * @Author: xxx
-    * @Date: 2020-08-03 10:22:11
+    * @Date: 2020-09-13 21:02:16
     */
-    //@AutoLog(value = "删除门类")
     @RequestMapping(value = "/delete/{id}")
+    @RequiresPermissions("dict:delete")
     public Response delete(@PathVariable String id) {
-        testService.delete(id);
+        sysDictService.delete(id);
         return Response.success();
     }
 

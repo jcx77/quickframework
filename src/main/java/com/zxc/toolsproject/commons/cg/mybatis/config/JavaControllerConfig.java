@@ -1,13 +1,20 @@
 package com.zxc.toolsproject.commons.cg.mybatis.config;
 
 public class JavaControllerConfig {
-	private String targetPackage;
+	private String controllerPackage;
 
-	public String getTargetPackage() {
-		return targetPackage;
+	public JavaControllerConfig() {
 	}
 
-	public void setTargetPackage(String targetPackage) {
-		this.targetPackage = targetPackage;
+	public JavaControllerConfig(String controllerPackage) {
+		this.controllerPackage = controllerPackage;
+	}
+
+	public String getControllerPackage() {
+		return controllerPackage;
+	}
+
+	public void setControllerPackage(String controllerPackage) {
+		this.controllerPackage = controllerPackage;
 	}
 }

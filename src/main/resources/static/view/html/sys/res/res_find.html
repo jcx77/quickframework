@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../css/common.css" media="all">
+<title></title>
+</head>
+<body class="bg-color">
+	<div class="layui-fluid" style="display: none;">
+		<div class="layui-card">
+			<div class="layui-card-body">
+				<div class="treegrid-toolbar">
+					<div style="float: left;"><!--shiro-perms="res:insert"-->
+						<a id="insert" class="layui-btn layui-btn-sm" >添加</a>
+					</div>
+					<div style="float: right;">
+						<div id="expand" class="layui-inline" title="展开">
+							<i class="layui-icon layui-icon-down"></i>
+						</div>
+						<div id="fold" class="layui-inline" title="折叠">
+							<i class="layui-icon layui-icon-right"></i>
+						</div>
+						<div id="refresh" class="layui-inline" title="刷新">
+							<i class="layui-icon layui-icon-refresh"></i>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+				</div>
+				<table id="tg" lay-filter="tg"></table>
+			</div>
+		</div>
+	</div>
+	<script id="cb" type="text/html">
+		<a class="layui-btn layui-btn-xs" lay-event="update" shiro-perms="res:update">修改</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete" shiro-perms="res:delete">删除</a>
+	</script>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			treeTable : 'lib/extend/treeTable/treeTable',
+			common : 'js/common',
+			shiro : 'js/shiro'
+		}).use([ 'treeTable', 'common', 'shiro' ], function() {
+			var res_type_option_json = layui.$.http.getJSON('/api/core/option/res_type');
+			var res_type_option = layui.$.util.toObject(res_type_option_json, 'value', 'text');
+			var flag_option_json = layui.$.http.getJSON('/api/core/option/flag');
+			var flag_option = layui.$.util.toObject(flag_option_json, 'value', 'text');
+			var tg = layui.treeTable.render({
+				elem : '#tg',
+				height : 'full-153',
+				tree : {
+					iconIndex : 1,
+					arrowType : 'arrow2',
+					isPidData : true
+				},
+				reqData : function(data, callback) {
+					callback(layui.$.http.postJSON('/api/sys/res/find'));
+					layui.$.shiro.render();
+					layui.$('.layui-fluid').show();
+				},
+				cols : [ {
+					type : 'numbers'
+				}, {
+					field : 'id',
+					title : '资源代码',
+					width : 250
+				}, {
+					field : 'name',
+					title : '资源名称',
+					width : 120
+				}, {
+					field : 'type',
+					title : '类型',
+					width : 60,
+					templet : function(d) {
+						if (res_type_option[d.type]) {
+							return res_type_option[d.type];
+						} else {
+							return '';
+						}
+					}
+				}, {
+					field : 'icon',
+					title : '图标',
+					width : 60,
+					templet : function(d) {
+						if (d.icon) {
+							return '<i class="layui-icon ' + d.icon + '"></i>';
+						} else {
+							return '';
+						}
+					}
+				}, {
+					field : 'url',
+					title : '路径',
+					width : 200
+				}, {
+					field : 'sort',
+					title : '顺序',
+					width : 60
+				}, {
+					field : 'show',
+					title : '显示',
+					width : 60,
+					templet : function(d) {
+						if (flag_option[d.show]) {
+							return flag_option[d.show];
+						} else {
+							return '';
+						}
+					}
+				}, {
+					title : '操作',
+					toolbar : '#cb',
+					width : 150,
+					align : 'center'
+				} ]
+			});
+			tg.expandAll();
+			layui.treeTable.on('tool(tg)', function(obj) {
+				var row = obj.data;
+				if (obj.event == 'update') {
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'res_update.html?id=' + row.id
+					});
+				} else if (obj.event == 'delete') {
+					layui.$.gui.confirm('确定删除资源', function() {
+						layui.$.http.get({
+							url : '/api/sys/res/delete/' + row.id,
+							success : function(data) {
+								layui.$.gui.handle(data, function() {
+									layui.$('#refresh').click();
+								});
+							}
+						});
+					});
+				}
+			});
+			layui.$('#insert').click(function() {
+				layui.$.gui.open({
+					title : layui.$(this).text(),
+					url : 'res_insert.html'
+				});
+			});
+			layui.$('#expand').click(function() {
+				tg.expandAll();
+			});
+			layui.$('#fold').click(function() {
+				tg.foldAll();
+			});
+			layui.$('#refresh').click(function() {
+				tg.refresh();
+				tg.expandAll();
+			});
+		});
+	</script>
+</body>
+</html>

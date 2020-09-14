@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../css/common.css">
+<title></title>
+</head>
+<body>
+	<div class="layui-fluid">
+		<table id="dg" lay-filter="dg"></table>
+	</div>
+	<script id="cb" type="text/html">
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="recovery">还原</a>
+	</script>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			common : 'js/common',
+			shiro : 'js/shiro'
+		}).use([ 'table', 'common', 'shiro' ], function() {
+			layui.table.render({
+				elem : '#dg',
+				toolbar : true,
+				defaultToolbar : [ 'filter', 'exports', 'print', {
+					title : '刷新',
+					layEvent : 'refresh',
+					icon : 'layui-icon-refresh'
+				} ],
+				url : layui.$.http.baseUrl + '/api/sys/dict/find/recovery',
+				method : 'post',
+				contentType : 'application/json',
+				page : false,
+				parseData : function(res) {
+					if (res.status == 0) {
+						if (res.result) {
+							return {
+								"code" : res.status,
+								"msg" : res.msg,
+								"count" : res.result.length,
+								"data" : res.result
+							};
+						} else {
+							return {
+								"code" : res.status,
+								"msg" : res.msg,
+								"count" : 0,
+								"data" : []
+							};
+						}
+					} else if (res.status == 100) {
+						layui.$.gui.error(res.msg, function() {
+							layui.$.gui.toLogin();
+						});
+					} else {
+						layui.$.gui.error(res.msg);
+					}
+				},
+				done : function(res, curr, count) {
+					layui.$.shiro.render();
+				},
+				cols : [ [ {
+					fixed : 'left',
+					type : 'numbers'
+				}, {
+					field : 'id',
+					title : '字典代码',
+					width : 250
+				}, {
+					field : 'name',
+					title : '字典名称',
+					width : 250
+				}, {
+					field : 'sort',
+					title : '顺序',
+					width : 100
+				}, {
+					fixed : 'right',
+					title : '操作',
+					toolbar : '#cb',
+					width : 80,
+					align : 'center'
+				} ] ]
+			});
+			layui.table.on('toolbar(dg)', function(obj) {
+				switch (obj.event) {
+				case 'refresh':
+					layui.table.reload('dg');
+					flag = true;
+					break;
+				}
+			});
+			layui.table.on('tool(dg)', function(obj) {
+				var row = obj.data;
+				if (obj.event == 'recovery') {
+					layui.$.gui.confirm('确定还原字典', function() {
+						layui.$.http.get({
+							url : '/api/sys/dict/recovery/' + row.id,
+							success : function(data) {
+								layui.$.gui.handle(data, function() {
+									parent.layui.$('button[lay-submit]').click();
+									layui.$.gui.close();
+								});
+							}
+						});
+					});
+				}
+			});
+		});
+	</script>
+</body>
+</html>

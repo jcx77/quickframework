@@ -52,10 +52,10 @@ public class MyBatisGenerator {
 		DatabaseGenerator databaseGenerator = new DatabaseGenerator(databaseConfig);
 		tables = databaseGenerator.generate();
 	}
-
+	//
 	private void initJavaModels() {
 		try {
-			javaModels = new ArrayList<JavaModel>();
+			javaModels = new ArrayList<>();
 			for (Table table : tables) {
 				javaModels.add(createModel(table));
 			}
@@ -93,7 +93,7 @@ public class MyBatisGenerator {
 			javaServices = new ArrayList<>();
 			for (JavaModel javaModel : javaModels) {
 				JavaService javaService = new JavaService();
-				javaService.setPackageName(myBatisConfig.getJavaServiceConfig().getTargetPackage());
+				javaService.setPackageName(myBatisConfig.getJavaServiceConfig().getServicePackage());
 				javaService.setClassName(javaModel.getClassName() + "Service");
 				javaService.setJavaModel(javaModel);
 				javaService.setMapperName(myBatisConfig.getJavaMapperConfig().getTargetPackage());
@@ -111,10 +111,10 @@ public class MyBatisGenerator {
 			javaControllers = new ArrayList<>();
 			for (JavaModel javaModel : javaModels) {
 				JavaController javaController = new JavaController();
-				javaController.setPackageName(myBatisConfig.getJavaControllerConfig().getTargetPackage());
+				javaController.setPackageName(myBatisConfig.getJavaControllerConfig().getControllerPackage());
 				javaController.setClassName(javaModel.getClassName() + "Controller");
 				javaController.setJavaModel(javaModel);
-				javaController.setServiceName(myBatisConfig.getJavaServiceConfig().getTargetPackage());
+				javaController.setServiceName(myBatisConfig.getJavaServiceConfig().getServicePackage());
 				javaController.setServiceClassName(javaModel.getClassName() + "Service");
 				javaControllers.add(javaController);
 			}

@@ -157,14 +157,14 @@
 			layui.$('#project').text(layui.$.session.getParam().project);
 			layui.$(document).attr("title", layui.$.session.getParam().project);
 			layui.$.session.setLoginUser(layui.$.http.getJSON('/api/core/loginUser'));
-			//layui.$('#loginUser').text(layui.$.session.getLoginUser().name);
-			//layui.$('#loginOrgan').text(layui.$.session.getLoginUser().organName);
-			//var data = layui.$.util.toTree(layui.$.session.getLoginUser().menu);
-			//var getTpl = mm.innerHTML, view = document.getElementById('LAY-system-side-menu');
-			//layui.laytpl(getTpl).render(data, function(html) {
-			//	view.innerHTML = html;
-			//});
-			//layui.element.render('nav');
+			layui.$('#loginUser').text(layui.$.session.getLoginUser().name);
+			layui.$('#loginOrgan').text(layui.$.session.getLoginUser().organName);
+			var data = layui.$.util.toTree(layui.$.session.getLoginUser().menu);
+			var getTpl = mm.innerHTML, view = document.getElementById('LAY-system-side-menu');
+			layui.laytpl(getTpl).render(data, function(html) {
+				view.innerHTML = html;
+			});
+			layui.element.render('nav');
 			layui.admin.events.organ = function() {
 				layui.$.gui.open({
 					title : layui.$(this).text(),

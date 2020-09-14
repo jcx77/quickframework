@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../../css/common.css">
+<title></title>
+</head>
+<body class="bg-color">
+	<div class="layui-fluid">
+		<div class="layui-card">
+			<div class="layui-card-header layui-card-header-auto">
+				<form id="fm" class="layui-form layui-form-pane">
+					<div class="layui-row layui-col-space5">
+						<div class="layui-col-md4">
+							<label class="layui-form-label">项目代码</label>
+							<div class="layui-input-block">
+								<input name="code" class="layui-input" placeholder="请输入" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<label class="layui-form-label">项目名称</label>
+							<div class="layui-input-block">
+								<input name="name" class="layui-input" placeholder="请输入" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<div class="btn-group">
+								<button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="find">查询</button>
+								<a id="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-card-body">
+				<table id="dg" lay-filter="dg"></table>
+			</div>
+		</div>
+	</div>
+	<script id="tb" type="text/html"><!--shiro-perms="dict:item:insert"-->
+		<a class="layui-btn layui-btn-sm" lay-event="insert" >添加</a>
+		<a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="recovery" shiro-perms="dict:item:recovery">还原</a>
+	</script>
+	<script id="cb" type="text/html">
+		<a class="layui-btn layui-btn-xs" lay-event="update" shiro-perms="dict:item:update">修改</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete" shiro-perms="dict:item:delete">删除</a>
+	</script>
+	<script src="../../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../../lib/layuiadmin/'
+		}).extend({
+			common : 'js/common',
+			shiro : 'js/shiro'
+		}).use([ 'table', 'common', 'shiro' ], function() {
+			layui.table.render({
+				elem : '#dg',
+				toolbar : '#tb',
+				defaultToolbar : [ 'filter', 'exports', 'print', {
+					title : '刷新',
+					layEvent : 'refresh',
+					icon : 'layui-icon-refresh'
+				} ],
+				url : layui.$.http.baseUrl + '/api/sys/dict/item/find/' + layui.$.http.param('dictId'),
+				method : 'post',
+				contentType : 'application/json',
+				parseData : function(res) {
+					if (res.status == 0) {
+						if (res.result) {
+							return {
+								"code" : res.status,
+								"msg" : res.msg,
+								"count" : res.result.length,
+								"data" : res.result
+							};
+						} else {
+							return {
+								"code" : res.status,
+								"msg" : res.msg,
+								"count" : 0,
+								"data" : []
+							};
+						}
+					} else if (res.status == 100) {
+						layui.$.gui.error(res.msg, function() {
+							layui.$.gui.toLogin();
+						});
+					} else {
+						layui.$.gui.error(res.msg);
+					}
+				},
+				done : function(res, curr, count) {
+					layui.$.shiro.render();
+				},
+				cols : [ [ {
+					fixed : 'left',
+					type : 'numbers'
+				}, {
+					field : 'code',
+					title : '项目代码',
+					width : 250
+				}, {
+					field : 'name',
+					title : '项目名称',
+					width : 250
+				}, {
+					field : 'sort',
+					title : '顺序',
+					width : 100
+				}, {
+					fixed : 'right',
+					title : '操作',
+					toolbar : '#cb',
+					width : 150,
+					align : 'center'
+				} ] ]
+			});
+			layui.table.on('toolbar(dg)', function(obj) {
+				switch (obj.event) {
+				case 'insert':
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'dict_item_insert.html?dictId=' + layui.$.http.param('dictId')
+					});
+					break;
+				case 'recovery':
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'dict_item_recovery.html?dictId=' + layui.$.http.param('dictId')
+					});
+					break;
+				case 'refresh':
+					layui.table.reload('dg');
+					flag = true;
+					break;
+				}
+			});
+			layui.table.on('tool(dg)', function(obj) {
+				var row = obj.data;
+				if (obj.event == 'update') {
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'dict_item_update.html?id=' + row.id
+					});
+				} else if (obj.event == 'delete') {
+					layui.$.gui.confirm('确定删除项目', function() {
+						layui.$.http.get({
+							url : '/api/sys/dict/item/delete/' + row.id,
+							success : function(data) {
+								layui.$.gui.handle(data, function() {
+									layui.$('button[lay-submit]').click();
+								});
+							}
+						});
+					});
+				}
+			});
+			layui.form.on('submit(find)', function(data) {
+				layui.table.reload('dg', {
+					where : layui.$.form.val('fm')
+				});
+				return false;
+			});
+			layui.$('#reset').click(function(e) {
+				layui.$.form.reset('fm');
+			});
+		});
+	</script>
+</body>
+</html>

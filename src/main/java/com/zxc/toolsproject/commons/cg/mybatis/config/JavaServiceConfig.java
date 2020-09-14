@@ -1,13 +1,20 @@
 package com.zxc.toolsproject.commons.cg.mybatis.config;
 
 public class JavaServiceConfig {
-	private String targetPackage;
+	private String servicePackage;
 
-	public String getTargetPackage() {
-		return targetPackage;
+	public JavaServiceConfig() {
 	}
 
-	public void setTargetPackage(String targetPackage) {
-		this.targetPackage = targetPackage;
+	public JavaServiceConfig(String servicePackage) {
+		this.servicePackage = servicePackage;
+	}
+
+	public String getServicePackage() {
+		return servicePackage;
+	}
+
+	public void setServicePackage(String servicePackage) {
+		this.servicePackage = servicePackage;
 	}
 }

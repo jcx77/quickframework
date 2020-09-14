@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../css/common.css">
+<title></title>
+</head>
+<body>
+	<div class="layui-fluid">
+		<div class="row-crad">
+			<form id="fm" class="layui-form layui-form-pane">
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">字典代码</label>
+						<div class="layui-input-block">
+							<input name="id" class="layui-input" placeholder="请输入" autocomplete="off" lay-verify="required|maxLen" maxLen="50">
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">字典名称</label>
+						<div class="layui-input-block">
+							<input name="name" class="layui-input" placeholder="请输入" autocomplete="off" lay-verify="required|maxLen" maxLen="50">
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">顺序</label>
+						<div class="layui-input-block">
+							<input name="sort" class="layui-input" placeholder="请输入" autocomplete="off" lay-verify="required|integer|max" max="10000">
+						</div>
+					</div>
+				</div>
+				<div class="layui-layout-admin">
+					<div class="layui-input-block">
+						<div class="layui-footer">
+							<button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="apply">确定</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			common : 'js/common',
+			shiro : 'js/shiro',
+		}).use([ 'common', 'shiro' ], function() {
+			layui.form.on('submit(apply)', function(data) {
+				layui.$.http.post({
+					url : '/api/sys/dict/insert',
+					data : layui.$.form.val('fm'),
+					success : function(data) {
+						layui.$.gui.handle(data, function() {
+							parent.layui.$('button[lay-submit]').click();
+							layui.$.gui.close();
+						});
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

@@ -2,18 +2,27 @@ package com.zxc.toolsproject.api.core.service;
 
 import com.zxc.toolsproject.api.core.model.SysUser;
 import com.zxc.toolsproject.api.core.vo.ui.Param;
+import com.zxc.toolsproject.api.sys.mapper.SysDictItemMapper;
+import com.zxc.toolsproject.api.sys.mapper.SysDictMapper;
 import com.zxc.toolsproject.api.sys.mapper.SysParamMapper;
 import com.zxc.toolsproject.api.sys.mapper.SysUserMapper;
+import com.zxc.toolsproject.api.sys.model.SysDict;
+import com.zxc.toolsproject.api.sys.model.SysDictItem;
 import com.zxc.toolsproject.api.sys.model.SysParam;
 import com.zxc.toolsproject.commons.constant.DataConstant;
+import com.zxc.toolsproject.commons.exception.BizException;
 import com.zxc.toolsproject.commons.shiro.tools.ShiroTools;
+import com.zxc.toolsproject.commons.vo.ui.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
+
 import java.beans.PropertyDescriptor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,10 +35,10 @@ public class CoreService {
 //	private SysUserOrganMapper sysUserOrganMapper;
 	@Autowired
 	private SysParamMapper sysParamMapper;
-//	@Autowired
-//	private SysDictMapper sysDictMapper;
-//	@Autowired
-//	private SysDictItemMapper sysDictItemMapper;
+	@Autowired
+	private SysDictMapper sysDictMapper;
+	@Autowired
+	private SysDictItemMapper sysDictItemMapper;
 
 	@Cacheable(cacheNames = "shiro", key = "'param'")
 	@Transactional(readOnly = true)
@@ -67,7 +76,7 @@ public class CoreService {
 	public String updatePassword(String id, String password) {
 		SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
 		sysUser.setPassword(ShiroTools.md5(password, id));
-		sysUserMapper.updateByPrimaryKeySelective(sysUser);
+		//sysUserMapper.updateByPrimaryKeySelective(sysUser);
 		return sysUser.getPassword();
 	}
 //
@@ -112,37 +121,37 @@ public class CoreService {
 //		sysUserMapper.updateByPrimaryKeySelective(sysUser);
 //	}
 //
-//	@Cacheable(cacheNames = "dict", key = "'dict_option_'+#dictId")
-//	@Transactional(readOnly = true)
-//	public List<Option> findOption(String dictId) {
-//		return findOption(dictId, DataConstant.DELETE_FLAG_0);
-//	}
-//
-//	@Cacheable(cacheNames = "dict", key = "'dict_option_all_'+#dictId")
-//	@Transactional(readOnly = true)
-//	public List<Option> findOptionAll(String dictId) {
-//		return findOption(dictId, null);
-//	}
-//
-//	private List<Option> findOption(String dictId, String deleteFlag) {
-//		SysDict record = new SysDict();
-//		record.setId(dictId);
-//		record.setDeleteFlag(DataConstant.DELETE_FLAG_1);
-//		if (sysDictMapper.selectCount(record) > 0) {
-//			throw new BizException("字典已删除");
-//		}
-//		List<Option> list = new ArrayList<Option>();
-//		Example example = new Example(SysDictItem.class);
-//		example.orderBy("sort");
-//		Criteria criteria = example.createCriteria();
-//		criteria.andEqualTo("dictId", dictId);
-//		if (deleteFlag != null) {
-//			criteria.andEqualTo("deleteFlag", deleteFlag);
-//		}
-//		List<SysDictItem> sysDictItems = sysDictItemMapper.selectByExample(example);
-//		for (SysDictItem sysDictItem : sysDictItems) {
-//			list.add(new Option(sysDictItem.getCode(), sysDictItem.getName()));
-//		}
-//		return list;
-//	}
+	@Cacheable(cacheNames = "dict", key = "'dict_option_'+#dictId")
+	@Transactional(readOnly = true)
+	public List<Option> findOption(String dictId) {
+		return findOption(dictId, DataConstant.DELETE_FLAG_0);
+	}
+
+	@Cacheable(cacheNames = "dict", key = "'dict_option_all_'+#dictId")
+	@Transactional(readOnly = true)
+	public List<Option> findOptionAll(String dictId) {
+		return findOption(dictId, null);
+	}
+
+	private List<Option> findOption(String dictId, String deleteFlag) {
+		SysDict record = new SysDict();
+		record.setId(dictId);
+		record.setDeleteFlag(DataConstant.DELETE_FLAG_1);
+		if (sysDictMapper.selectCount(record) > 0) {
+			throw new BizException("字典已删除");
+		}
+		List<Option> list = new ArrayList<Option>();
+		Example example = new Example(SysDictItem.class);
+		example.orderBy("sort");
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("dictId", dictId);
+		if (deleteFlag != null) {
+			criteria.andEqualTo("deleteFlag", deleteFlag);
+		}
+		List<SysDictItem> sysDictItems = sysDictItemMapper.selectByExample(example);
+		for (SysDictItem sysDictItem : sysDictItems) {
+			list.add(new Option(sysDictItem.getCode(), sysDictItem.getName()));
+		}
+		return list;
+	}
 }
