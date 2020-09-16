@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../css/common.css">
+<title></title>
+</head>
+<body>
+	<div class="layui-fluid">
+		<div class="row-crad">
+			<form id="fm" class="layui-form layui-form-pane">
+				<input name="id" type="hidden">
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">帐号</label>
+						<div class="layui-input-block">
+							<input name="account" class="layui-input" placeholder="请输入" autocomplete="off" lay-verify="required|maxLen" maxLen="50">
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">姓名</label>
+						<div class="layui-input-block">
+							<input name="name" class="layui-input" placeholder="请输入" autocomplete="off" lay-verify="required|maxLen" maxLen="50">
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">机构</label>
+						<div class="layui-input-block">
+							<div id="organIds"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">角色</label>
+						<div class="layui-input-block">
+							<div id="roleIds"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space15">
+					<div class="layui-col-md12">
+						<label class="layui-form-label">锁定</label>
+						<div class="layui-input-block">
+							<div id="locked"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-layout-admin">
+					<div class="layui-input-block">
+						<div class="layui-footer">
+							<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="apply">确定</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			xmSelect : 'lib/extend/xm-select',
+			common : 'js/common',
+			shiro : 'js/shiro',
+		}).use([ 'xmSelect', 'common', 'shiro' ], function() {
+			var organ_tree_json = layui.$.http.getJSON('/api/web/sys/organ/tree');
+			var role_tree_json = layui.$.http.getJSON('/api/web/sys/role/tree');
+			var flag_option_json = layui.$.http.getJSON('/api/web/dict/option/flag');
+			var organIds = layui.xmSelect.render({
+				el : '#organIds',
+				name : 'organIds',
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					value : 'id',
+					name : 'text'
+				},
+				tree : {
+					show : true,
+					strict : false
+				},
+				layVerify : 'required',
+				data : layui.$.util.toTree(organ_tree_json)
+			});
+			var roleIds = layui.xmSelect.render({
+				el : '#roleIds',
+				name : 'roleIds',
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					value : 'id',
+					name : 'text'
+				},
+				tree : {
+					show : true,
+					strict : false
+				},
+				data : layui.$.util.toTree(role_tree_json)
+			});
+			var locked = layui.xmSelect.render({
+				el : '#locked',
+				name : 'locked',
+				radio : true,
+				clickClose : true,
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					name : 'text',
+				},
+				layVerify : 'required',
+				data : flag_option_json
+			});
+			layui.$.form.load('fm', layui.$.http.getJSON('/api/web/sys/user/get/' + layui.$.http.param('id')));
+			layui.form.on('submit(apply)', function(data) {
+				layui.$.http.post({
+					url : '/api/web/sys/user/update',
+					data : layui.$.form.val('fm'),
+					success : function(data) {
+						layui.$.gui.handle(data, function() {
+							parent.layui.$('button[lay-submit]').click();
+							layui.$.gui.close();
+						});
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

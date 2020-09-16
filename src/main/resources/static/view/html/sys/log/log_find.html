@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../css/common.css">
+<title></title>
+</head>
+<body class="bg-color">
+	<div class="layui-fluid">
+		<div class="layui-card">
+			<div class="layui-card-header layui-card-header-auto">
+				<form id="fm" class="layui-form layui-form-pane">
+					<div class="layui-row layui-col-space5">
+						<div class="layui-col-md4">
+							<label class="layui-form-label">日志类型</label>
+							<div class="layui-input-block">
+								<div id="type"></div>
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<label class="layui-form-label">操作时间起</label>
+							<div class="layui-input-block">
+								<input name="createdTimeBegin" class="layui-input" placeholder="请选择" readonly="readonly">
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<label class="layui-form-label">操作时间止</label>
+							<div class="layui-input-block">
+								<input name="createdTimeEnd" class="layui-input" placeholder="请选择" readonly="readonly">
+							</div>
+						</div>
+					</div>
+					<div class="layui-row layui-col-space5">
+						<div class="layui-col-md4">
+							<label class="layui-form-label">日志内容</label>
+							<div class="layui-input-block">
+								<input name="content" class="layui-input" placeholder="请输入" autocomplete="off">
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<div class="btn-group">
+								<button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="find">查询</button>
+								<a id="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="layui-card-body">
+				<table id="dg" lay-filter="dg"></table>
+			</div>
+		</div>
+	</div>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			xmSelect : 'lib/extend/xm-select',
+			common : 'js/common',
+			shiro : 'js/shiro'
+		}).use([ 'table', 'laydate', 'xmSelect', 'common', 'shiro' ], function() {
+			var log_type_option_json = layui.$.http.getJSON('/api/core/option/log_type');
+			var log_type_option = layui.$.util.toObject(log_type_option_json, 'value', 'text');
+			var user_option_json = layui.$.http.getJSON('/api/sys/user/option/all');
+			var user_option = layui.$.util.toObject(user_option_json, 'value', 'text');
+			var type = layui.xmSelect.render({
+				el : '#type',
+				name : 'type',
+				radio : true,
+				clickClose : true,
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					name : 'text',
+				},
+				data : log_type_option_json
+			});
+			layui.laydate.render({
+				elem : 'input[name="createdTimeBegin"]',
+				type : 'datetime'
+			});
+			layui.laydate.render({
+				elem : 'input[name="createdTimeEnd"]',
+				type : 'datetime'
+			});
+			layui.table.render({
+				elem : '#dg',
+				toolbar : true,
+				url : layui.$.http.baseUrl + '/api/sys/log/find',
+				method : 'post',
+				contentType : 'application/json',
+				page : true,
+				limit : 20,
+				limits : [ 10, 20, 50, 100, 200, 500, 1000 ],
+				request : {
+					pageName : 'page',
+					limitName : 'rows'
+				},
+				parseData : function(res) {
+					if (res.status == 0) {
+						return {
+							"code" : res.status,
+							"msg" : res.msg,
+							"count" : res.result.total,
+							"data" : res.result.list
+						};
+					} else if (res.status == 100) {
+						layui.$.gui.error(res.msg, function() {
+							layui.$.gui.toLogin();
+						});
+					} else {
+						layui.$.gui.error(res.msg);
+					}
+				},
+				done : function(res, curr, count) {
+					layui.$.shiro.render();
+				},
+				cols : [ [ {
+					fixed : 'left',
+					type : 'numbers'
+				}, {
+					field : 'type',
+					fixed : 'left',
+					title : '日志类型',
+					width : 100,
+					templet : function(d) {
+						if (log_type_option[d.type]) {
+							return log_type_option[d.type];
+						} else {
+							return '';
+						}
+					}
+				}, {
+					field : 'content',
+					fixed : 'left',
+					title : '日志内容',
+					width : 150
+				}, {
+					field : 'clientIp',
+					title : '客户端地址',
+					width : 150
+				}, {
+					field : 'requestUrl',
+					title : '请求路径',
+					width : 150
+				}, {
+					field : 'requestParam',
+					title : '请求参数',
+					width : 200
+				}, {
+					field : 'responseResult',
+					title : '响应结果',
+					width : 200
+				}, {
+					field : 'executeMethod',
+					title : '执行方法',
+					width : 200
+				}, {
+					field : 'executeTime',
+					title : '执行时间',
+					width : 100
+				}, {
+					field : 'responseResult',
+					title : '响应结果',
+					width : 200
+				}, {
+					field : 'createdBy',
+					fixed : 'right',
+					title : '操作人员',
+					width : 100,
+					templet : function(d) {
+						if (user_option[d.createdBy]) {
+							return user_option[d.createdBy];
+						} else {
+							return '';
+						}
+					}
+				}, {
+					field : 'createdTime',
+					fixed : 'right',
+					title : '操作时间',
+					width : 160
+				} ] ]
+			});
+			layui.form.on('submit(find)', function(data) {
+				layui.table.reload('dg', {
+					where : layui.$.form.val('fm'),
+					page : {
+						curr : 1
+					}
+				});
+				return false;
+			});
+			layui.$('#reset').click(function(e) {
+				layui.$.form.reset('fm');
+			});
+		});
+	</script>
+</body>
+</html>

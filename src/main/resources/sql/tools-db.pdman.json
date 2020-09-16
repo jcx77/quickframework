@@ -5,88 +5,6 @@
       "chnname": "系统管理",
       "entities": [
         {
-          "title": "SYS_PARAM",
-          "fields": [
-            {
-              "name": "CODE_",
-              "type": "Id",
-              "remark": "",
-              "chnname": "代码",
-              "pk": true,
-              "notNull": true
-            },
-            {
-              "name": "NAME_",
-              "type": "VARCHAR(50)",
-              "remark": "",
-              "chnname": "名称",
-              "notNull": true
-            },
-            {
-              "name": "VALUE_",
-              "type": "VARCHAR(500)",
-              "remark": "",
-              "chnname": "内容",
-              "notNull": true
-            },
-            {
-              "name": "SORT_",
-              "type": "Integer",
-              "remark": "",
-              "chnname": "顺序",
-              "notNull": true
-            }
-          ],
-          "indexs": [],
-          "headers": [
-            {
-              "fieldName": "chnname",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "name",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "type",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "dataType",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "remark",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "pk",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "notNull",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "autoIncrement",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "defaultValue",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "relationNoShow",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "uiHint",
-              "relationNoShow": true
-            }
-          ],
-          "chnname": "参数表"
-        },
-        {
           "title": "SYS_DICT",
           "fields": [
             {
@@ -317,6 +235,137 @@
           "chnname": "字典项目表"
         },
         {
+          "title": "SYS_LOG",
+          "fields": [
+            {
+              "name": "ID_",
+              "type": "Id",
+              "remark": "",
+              "chnname": "ID",
+              "notNull": true,
+              "pk": true
+            },
+            {
+              "name": "TYPE_",
+              "type": "DictCode",
+              "remark": "",
+              "chnname": "类型",
+              "notNull": true
+            },
+            {
+              "name": "CONTENT_",
+              "type": "VARCHAR(200)",
+              "remark": "",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "CLIENT_IP",
+              "type": "VARCHAR(100)",
+              "remark": "",
+              "chnname": "客户端地址",
+              "notNull": true
+            },
+            {
+              "name": "REQUEST_URL",
+              "type": "VARCHAR(200)",
+              "remark": "",
+              "chnname": "请求路径",
+              "notNull": true
+            },
+            {
+              "name": "REQUEST_PARAM",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "请求参数",
+              "notNull": false
+            },
+            {
+              "name": "RESPONSE_RESULT",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "响应结果",
+              "notNull": true
+            },
+            {
+              "name": "EXECUTE_METHOD",
+              "type": "VARCHAR(500)",
+              "remark": "",
+              "chnname": "执行方法",
+              "notNull": true
+            },
+            {
+              "name": "EXECUTE_TIME",
+              "type": "BigInt",
+              "remark": "",
+              "chnname": "执行时间",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_BY",
+              "type": "Id",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": true
+            },
+            {
+              "name": "CREATED_TIME",
+              "type": "SYSTIME",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": true
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "日志表"
+        },
+        {
           "title": "SYS_ORGAN",
           "fields": [
             {
@@ -430,6 +479,88 @@
             }
           ],
           "chnname": "机构表"
+        },
+        {
+          "title": "SYS_PARAM",
+          "fields": [
+            {
+              "name": "CODE_",
+              "type": "Id",
+              "remark": "",
+              "chnname": "代码",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "NAME_",
+              "type": "VARCHAR(50)",
+              "remark": "",
+              "chnname": "名称",
+              "notNull": true
+            },
+            {
+              "name": "VALUE_",
+              "type": "VARCHAR(500)",
+              "remark": "",
+              "chnname": "内容",
+              "notNull": true
+            },
+            {
+              "name": "SORT_",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "顺序",
+              "notNull": true
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "参数表"
         },
         {
           "title": "SYS_RES",
@@ -859,7 +990,7 @@
           "chnname": "用户表"
         },
         {
-          "title": "SYS_USER_ORGAN",
+          "title": "SYS_USER_RES",
           "fields": [
             {
               "name": "ID_",
@@ -877,10 +1008,10 @@
               "notNull": true
             },
             {
-              "name": "ORGAN_ID",
+              "name": "RES_ID",
               "type": "Id",
               "remark": "",
-              "chnname": "机构ID",
+              "chnname": "资源ID",
               "notNull": true
             }
           ],
@@ -931,7 +1062,7 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "用户机构表"
+          "chnname": "用户资源表"
         },
         {
           "title": "SYS_USER_ROLE",
@@ -1009,7 +1140,7 @@
           "chnname": "用户角色表"
         },
         {
-          "title": "SYS_USER_RES",
+          "title": "SYS_USER_ORGAN",
           "fields": [
             {
               "name": "ID_",
@@ -1027,10 +1158,10 @@
               "notNull": true
             },
             {
-              "name": "RES_ID",
+              "name": "ORGAN_ID",
               "type": "Id",
               "remark": "",
-              "chnname": "资源ID",
+              "chnname": "机构ID",
               "notNull": true
             }
           ],
@@ -1081,138 +1212,7 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "用户资源表"
-        },
-        {
-          "title": "SYS_LOG",
-          "fields": [
-            {
-              "name": "ID_",
-              "type": "Id",
-              "remark": "",
-              "chnname": "ID",
-              "notNull": true,
-              "pk": true
-            },
-            {
-              "name": "TYPE_",
-              "type": "DictCode",
-              "remark": "",
-              "chnname": "类型",
-              "notNull": true
-            },
-            {
-              "name": "CONTENT_",
-              "type": "VARCHAR(200)",
-              "remark": "",
-              "chnname": "内容",
-              "notNull": true
-            },
-            {
-              "name": "CLIENT_IP",
-              "type": "VARCHAR(100)",
-              "remark": "",
-              "chnname": "客户端地址",
-              "notNull": true
-            },
-            {
-              "name": "REQUEST_URL",
-              "type": "VARCHAR(200)",
-              "remark": "",
-              "chnname": "请求路径",
-              "notNull": true
-            },
-            {
-              "name": "REQUEST_PARAM",
-              "type": "LongText",
-              "remark": "",
-              "chnname": "请求参数",
-              "notNull": false
-            },
-            {
-              "name": "RESPONSE_RESULT",
-              "type": "LongText",
-              "remark": "",
-              "chnname": "响应结果",
-              "notNull": true
-            },
-            {
-              "name": "EXECUTE_METHOD",
-              "type": "VARCHAR(500)",
-              "remark": "",
-              "chnname": "执行方法",
-              "notNull": true
-            },
-            {
-              "name": "EXECUTE_TIME",
-              "type": "BigInt",
-              "remark": "",
-              "chnname": "执行时间",
-              "notNull": true
-            },
-            {
-              "name": "CREATED_BY",
-              "type": "Id",
-              "remark": "",
-              "chnname": "创建人",
-              "notNull": true
-            },
-            {
-              "name": "CREATED_TIME",
-              "type": "SYSTIME",
-              "remark": "",
-              "chnname": "创建时间",
-              "notNull": true
-            }
-          ],
-          "indexs": [],
-          "headers": [
-            {
-              "fieldName": "chnname",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "name",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "type",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "dataType",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "remark",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "pk",
-              "relationNoShow": false
-            },
-            {
-              "fieldName": "notNull",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "autoIncrement",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "defaultValue",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "relationNoShow",
-              "relationNoShow": true
-            },
-            {
-              "fieldName": "uiHint",
-              "relationNoShow": true
-            }
-          ],
-          "chnname": "日志表"
+          "chnname": "用户机构表"
         },
         {
           "title": "SYS_JOB",
@@ -1709,59 +1709,103 @@
         "nodes": [
           {
             "shape": "table",
+            "title": "SYS_DICT",
+            "moduleName": false,
+            "x": 110,
+            "y": -140,
+            "id": "8ec9823b"
+          },
+          {
+            "shape": "table",
             "title": "SYS_PARAM",
             "moduleName": false,
-            "x": 186.796875,
-            "y": 88,
+            "x": -280,
+            "y": -130,
             "id": "d60a889b"
           },
           {
             "shape": "table",
             "title": "SYS_DICT_ITEM",
             "moduleName": false,
-            "x": 1400,
-            "y": 170,
+            "x": 550,
+            "y": -160,
             "id": "2d6d99dd"
           },
           {
             "shape": "table",
-            "title": "SYS_DICT",
+            "title": "SYS_LOG",
             "moduleName": false,
-            "x": 1020,
-            "y": 150,
-            "id": "8ec9823b"
-          },
-          {
-            "shape": "table",
-            "title": "SYS_ORGAN",
-            "moduleName": false,
-            "x": 434.40625,
-            "y": 358,
-            "id": "de1e6c3f"
+            "x": -280,
+            "y": 140,
+            "id": "c1c66e9a"
           },
           {
             "shape": "table",
             "title": "SYS_ROLE",
             "moduleName": false,
-            "x": 920,
-            "y": 430,
+            "x": 400,
+            "y": 70,
             "id": "0b7a433c"
+          },
+          {
+            "shape": "table",
+            "title": "SYS_USER",
+            "moduleName": false,
+            "x": 150,
+            "y": 380,
+            "id": "dd510016",
+            "size": [
+              218.25186420341305,
+              258.412207825284
+            ]
           },
           {
             "shape": "table",
             "title": "SYS_ROLE_RES",
             "moduleName": false,
-            "x": 1202.40625,
-            "y": 432,
+            "x": 670,
+            "y": 50,
             "id": "1b656de2"
           },
           {
             "shape": "table",
             "title": "SYS_RES",
             "moduleName": false,
-            "x": 1470,
-            "y": 470,
+            "x": 950,
+            "y": 80,
             "id": "3e071d49"
+          },
+          {
+            "shape": "table",
+            "title": "SYS_USER_RES",
+            "moduleName": false,
+            "x": 610,
+            "y": 270,
+            "id": "b49fa44f"
+          },
+          {
+            "shape": "table",
+            "title": "SYS_USER_ROLE",
+            "moduleName": false,
+            "x": 90,
+            "y": 110,
+            "id": "8711a168"
+          },
+          {
+            "shape": "table",
+            "title": "SYS_USER_ORGAN",
+            "moduleName": false,
+            "x": -210,
+            "y": 380,
+            "id": "34e7c0c5"
+          },
+          {
+            "shape": "table",
+            "title": "SYS_ORGAN",
+            "moduleName": false,
+            "x": -240,
+            "y": 600,
+            "id": "de1e6c3f"
           }
         ],
         "edges": [
@@ -1773,12 +1817,12 @@
             "id": "55830058",
             "controlPoints": [
               {
-                "x": 1158.6552734375,
-                "y": 92.19736842105263
+                "x": 257.9892578125,
+                "y": -197.80263157894737
               },
               {
-                "x": 1261.3447265625,
-                "y": 132.33695652173913
+                "x": 411.3447265625,
+                "y": -197.66304347826087
               }
             ],
             "sourceAnchor": 1,
@@ -1792,12 +1836,12 @@
             "id": "cc552d1c",
             "controlPoints": [
               {
-                "x": 1058.6552734375,
-                "y": 362.17857142857144
+                "x": 547.9892578125,
+                "y": 2.1785714285714306
               },
               {
-                "x": 1095.71875,
-                "y": 444.6388888888889
+                "x": 563.3125,
+                "y": 62.638888888888886
               }
             ],
             "sourceAnchor": 1,
@@ -1811,16 +1855,149 @@
             "id": "20dc110b",
             "controlPoints": [
               {
-                "x": 1309.09375,
-                "y": 464.8611111111111
+                "x": 776.6875,
+                "y": 82.86111111111111
               },
               {
-                "x": 1361.236328125,
-                "y": 412.1973684210526
+                "x": 831.90234375,
+                "y": 22.19736842105263
               }
             ],
             "sourceAnchor": 5,
             "targetAnchor": 0
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "dd510016",
+            "target": "34e7c0c5",
+            "id": "f2c190b3",
+            "controlPoints": [
+              {
+                "x": 2.0107421875,
+                "y": 280.58630777370274
+              },
+              {
+                "x": -97.6494140625,
+                "y": 392.6388888888889
+              }
+            ],
+            "sourceAnchor": 0,
+            "targetAnchor": 3
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "34e7c0c5",
+            "target": "de1e6c3f",
+            "id": "2d85c554",
+            "controlPoints": [
+              {
+                "x": -322.3505859375,
+                "y": 412.8611111111111
+              },
+              {
+                "x": -92.0107421875,
+                "y": 532.1785714285714
+              }
+            ],
+            "sourceAnchor": 4,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "0b7a433c",
+            "target": "8711a168",
+            "id": "258ac96c",
+            "controlPoints": [
+              {
+                "x": 252.0107421875,
+                "y": 2.1785714285714306
+              },
+              {
+                "x": 197.0185546875,
+                "y": 142.86111111111111
+              }
+            ],
+            "sourceAnchor": 0,
+            "targetAnchor": 5
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "b49fa44f",
+            "target": "dd510016",
+            "id": "f0df638b",
+            "controlPoints": [
+              {
+                "x": 502.9814453125,
+                "y": 282.6388888888889
+              },
+              {
+                "x": 297.9892578125,
+                "y": 280.58630777370274
+              }
+            ],
+            "sourceAnchor": 2,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "3e071d49",
+            "target": "b49fa44f",
+            "id": "c98f8d7d",
+            "controlPoints": [
+              {
+                "x": 831.90234375,
+                "y": 22.19736842105263
+              },
+              {
+                "x": 717.0185546875,
+                "y": 302.8611111111111
+              }
+            ],
+            "sourceAnchor": 0,
+            "targetAnchor": 5
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "8711a168",
+            "target": "dd510016",
+            "id": "492e1db6",
+            "controlPoints": [
+              {
+                "x": -17.0185546875,
+                "y": 122.63888888888889
+              },
+              {
+                "x": 2.0107421875,
+                "y": 280.58630777370274
+              }
+            ],
+            "sourceAnchor": 2,
+            "targetAnchor": 0
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "de1e6c3f",
+            "target": "dd510016",
+            "id": "90b01549",
+            "controlPoints": [
+              {
+                "x": -92.0107421875,
+                "y": 532.1785714285714
+              },
+              {
+                "x": 2.0107421875,
+                "y": 392.54577044355005
+              }
+            ],
+            "sourceAnchor": 1,
+            "targetAnchor": 10
           }
         ]
       },
@@ -1856,6 +2033,83 @@
           "to": {
             "entity": "SYS_RES",
             "field": "ID_"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_USER",
+            "field": "ID_"
+          },
+          "to": {
+            "entity": "SYS_USER_ORGAN",
+            "field": "USER_ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_USER_ORGAN",
+            "field": "ORGAN_ID"
+          },
+          "to": {
+            "entity": "SYS_ORGAN",
+            "field": "ID_"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_ROLE",
+            "field": "ID_"
+          },
+          "to": {
+            "entity": "SYS_USER_ROLE",
+            "field": "ROLE_ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_USER_RES",
+            "field": "USER_ID"
+          },
+          "to": {
+            "entity": "SYS_USER",
+            "field": "ID_"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_RES",
+            "field": "ID_"
+          },
+          "to": {
+            "entity": "SYS_USER_RES",
+            "field": "RES_ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_USER_ROLE",
+            "field": "USER_ID"
+          },
+          "to": {
+            "entity": "SYS_USER",
+            "field": "ID_"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "SYS_ORGAN",
+            "field": "ID_"
+          },
+          "to": {
+            "entity": "SYS_USER",
+            "field": "ORGAN_ID"
           }
         }
       ]

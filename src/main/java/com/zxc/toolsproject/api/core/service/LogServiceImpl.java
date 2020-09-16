@@ -1,8 +1,8 @@
 package com.zxc.toolsproject.api.core.service;
 
 
-import com.zxc.toolsproject.api.sys.mapper.SysLogMapper;
-import com.zxc.toolsproject.api.core.model.SysLog;
+import com.zxc.toolsproject.api.sys.log.mapper.SysLogMapper;
+import com.zxc.toolsproject.api.sys.log.model.SysLog;
 import com.zxc.toolsproject.commons.log.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

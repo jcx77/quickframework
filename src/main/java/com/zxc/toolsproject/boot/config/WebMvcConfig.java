@@ -36,14 +36,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //		return registration;
 //	}
 
-//	@Bean
-//	public FilterRegistrationBean<AbstractShiroFilter> shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean) throws Exception {
-//		FilterRegistrationBean<AbstractShiroFilter> registration = new FilterRegistrationBean<AbstractShiroFilter>();
-//		registration.setName("shiroFilter");
-//		registration.setFilter((AbstractShiroFilter) shiroFilterFactoryBean.getObject());
-//		registration.addUrlPatterns("/api/*");
-//		return registration;
-//	}
+	//shiro Filter--拦截器
+	@Bean
+	public FilterRegistrationBean<AbstractShiroFilter> shiroFilter(ShiroFilterFactoryBean shiroFilterFactoryBean) throws Exception {
+		FilterRegistrationBean<AbstractShiroFilter> registration = new FilterRegistrationBean<>();
+		registration.setName("shiroFilter");
+		registration.setFilter((AbstractShiroFilter) shiroFilterFactoryBean.getObject());
+		registration.addUrlPatterns("/api/*");
+		return registration;
+	}
 
 	@Bean
 	public ObjectMapper objectMapper() {

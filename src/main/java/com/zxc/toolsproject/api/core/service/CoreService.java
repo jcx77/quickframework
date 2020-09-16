@@ -1,14 +1,15 @@
 package com.zxc.toolsproject.api.core.service;
 
-import com.zxc.toolsproject.api.core.model.SysUser;
+import com.zxc.toolsproject.api.sys.user.model.SysUser;
 import com.zxc.toolsproject.api.core.vo.ui.Param;
-import com.zxc.toolsproject.api.sys.mapper.SysDictItemMapper;
-import com.zxc.toolsproject.api.sys.mapper.SysDictMapper;
-import com.zxc.toolsproject.api.sys.mapper.SysParamMapper;
-import com.zxc.toolsproject.api.sys.mapper.SysUserMapper;
-import com.zxc.toolsproject.api.sys.model.SysDict;
-import com.zxc.toolsproject.api.sys.model.SysDictItem;
-import com.zxc.toolsproject.api.sys.model.SysParam;
+import com.zxc.toolsproject.api.sys.dict.mapper.SysDictItemMapper;
+import com.zxc.toolsproject.api.sys.dict.mapper.SysDictMapper;
+import com.zxc.toolsproject.api.sys.dict.model.SysDict;
+import com.zxc.toolsproject.api.sys.param.mapper.SysParamMapper;
+import com.zxc.toolsproject.api.sys.user.mapper.SysUserMapper;
+
+import com.zxc.toolsproject.api.sys.dict.model.SysDictItem;
+import com.zxc.toolsproject.api.sys.param.model.SysParam;
 import com.zxc.toolsproject.commons.constant.DataConstant;
 import com.zxc.toolsproject.commons.exception.BizException;
 import com.zxc.toolsproject.commons.shiro.tools.ShiroTools;

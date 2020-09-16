@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../css/common.css" media="all">
+<title></title>
+</head>
+<body>
+	<div class="layui-fluid" style="display: none;">
+		<div class="treegrid-toolbar">
+			<div style="float: right;">
+				<div id="expand" class="layui-inline" title="展开">
+					<i class="layui-icon layui-icon-down"></i>
+				</div>
+				<div id="fold" class="layui-inline" title="折叠">
+					<i class="layui-icon layui-icon-right"></i>
+				</div>
+				<div id="refresh" class="layui-inline" title="刷新">
+					<i class="layui-icon layui-icon-refresh"></i>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<table id="tg" lay-filter="tg"></table>
+	</div>
+	<script id="cb" type="text/html">
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="recovery">还原</a>
+	</script>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			treeTable : 'lib/extend/treeTable/treeTable',
+			common : 'js/common',
+			shiro : 'js/shiro'
+		}).use([ 'treeTable', 'common', 'shiro' ], function() {
+			var tg = layui.treeTable.render({
+				elem : '#tg',
+				height : 'full-153',
+				tree : {
+					iconIndex : 1,
+					arrowType : 'arrow2',
+					isPidData : true
+				},
+				reqData : function(data, callback) {
+					callback(layui.$.http.postJSON('/api/sys/role/find/recovery'));
+					layui.$.shiro.render();
+					layui.$('.layui-fluid').show();
+				},
+				cols : [ {
+					type : 'numbers'
+				}, {
+					field : 'code',
+					title : '角色代码',
+					width : 250
+				}, {
+					field : 'name',
+					title : '角色名称',
+					width : 250
+				}, {
+					title : '操作',
+					toolbar : '#cb',
+					width : 80,
+					align : 'center'
+				} ]
+			});
+			tg.expandAll();
+			layui.treeTable.on('tool(tg)', function(obj) {
+				var row = obj.data;
+				if (obj.event == 'recovery') {
+					layui.$.gui.confirm('确定还原角色', function() {
+						layui.$.http.get({
+							url : '/api/sys/role/recovery/' + row.id,
+							success : function(data) {
+								layui.$.gui.handle(data, function() {
+									parent.layui.$('#refresh').click();
+									layui.$.gui.close();
+								});
+							}
+						});
+					});
+				}
+			});
+			layui.$('#expand').click(function() {
+				tg.expandAll();
+			});
+			layui.$('#fold').click(function() {
+				tg.foldAll();
+			});
+			layui.$('#refresh').click(function() {
+				tg.refresh();
+				tg.expandAll();
+			});
+		});
+	</script>
+</body>
+</html>

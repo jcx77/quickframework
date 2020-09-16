@@ -1,13 +1,12 @@
 package com.zxc.toolsproject.api.core.controller;
 
-import com.zxc.toolsproject.api.core.model.SysUser;
+import com.zxc.toolsproject.api.sys.user.model.SysUser;
 import com.zxc.toolsproject.api.core.service.CoreService;
 import com.zxc.toolsproject.api.core.vo.param.LoginParam;
 import com.zxc.toolsproject.api.core.vo.param.PasswordParam;
 import com.zxc.toolsproject.api.core.vo.result.LoginResult;
 import com.zxc.toolsproject.api.core.vo.result.LoginUserResult;
 import com.zxc.toolsproject.api.core.vo.ui.Param;
-import com.zxc.toolsproject.commons.exception.BizException;
 import com.zxc.toolsproject.commons.exception.WebException;
 import com.zxc.toolsproject.commons.log.AutoLog;
 import com.zxc.toolsproject.commons.log.LogType;

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../lib/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../../css/common.css">
+<title></title>
+</head>
+<body>
+	<div class="layui-fluid">
+		<div class="tree-crad">
+			<ul id="tt" class="ztree"></ul>
+		</div>
+		<div class="layui-layout-admin">
+			<div class="layui-input-block">
+				<div class="layui-footer">
+					<a id="apply" class="layui-btn layui-btn-sm">确定</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../../../lib/jquery/jquery.js"></script>
+	<script src="../../../lib/ztree/js/jquery.ztree.all.min.js"></script>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			common : 'js/common',
+			shiro : 'js/shiro',
+		}).use([ 'common', 'shiro' ], function() {
+			var tt = $.fn.zTree.init($("#tt"), {
+				check : {
+					enable : true,
+					chkboxType : {
+						"Y" : "ps",
+						"N" : "s"
+					}
+				},
+				data : {
+					simpleData : {
+						enable : true,
+						pIdKey : "pid",
+						rootPId : -1
+					},
+					key : {
+						name : "text"
+					}
+				},
+				view : {
+					showIcon : false
+				}
+			}, layui.$.http.getJSON('/api/sys/role/res/tree/' + layui.$.http.param('id')));
+			tt.expandAll(true);
+			layui.$('#apply').click(function() {
+				layui.$.http.post({
+					url : '/api/sys/role/res',
+					data : {
+						id : layui.$.http.param('id'),
+						ids : layui.$.util.toIds(tt.getCheckedNodes(true))
+					},
+					success : function(data) {
+						layui.$.gui.handle(data, function() {
+							layui.$.gui.close();
+						});
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

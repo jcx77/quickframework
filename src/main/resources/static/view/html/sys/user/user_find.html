@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<link rel="stylesheet" href="../../../lib/layuiadmin/layui/css/layui.css">
+<link rel="stylesheet" href="../../../lib/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../../css/common.css">
+<title></title>
+</head>
+<body class="bg-color">
+	<div class="ui-layout-west">
+		<ul id="tt" class="ztree"></ul>
+	</div>
+	<div class="ui-layout-center">
+		<div class="layui-card-header layui-card-header-auto">
+			<form id="fm" class="layui-form layui-form-pane">
+				<input name="organId" type="hidden">
+				<div class="layui-row layui-col-space4">
+					<div class="layui-col-md4">
+						<label class="layui-form-label">帐号</label>
+						<div class="layui-input-block">
+							<input name="account" class="layui-input" placeholder="请输入" autocomplete="off">
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<label class="layui-form-label">姓名</label>
+						<div class="layui-input-block">
+							<input name="name" class="layui-input" placeholder="请输入" autocomplete="off">
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<label class="layui-form-label">角色</label>
+						<div class="layui-input-block">
+							<div id="roleId"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space5">
+					<div class="layui-col-md4">
+						<label class="layui-form-label">锁定</label>
+						<div class="layui-input-block">
+							<div id="locked"></div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="btn-group">
+							<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="find">查询</button>
+							<a id="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="layui-card-body">
+			<table id="dg" lay-filter="dg"></table>
+		</div>
+	</div>
+	<script id="tb" type="text/html">
+		<a class="layui-btn layui-btn-sm" lay-event="insert" shiro-perms="user:insert">添加</a>
+		<a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="recovery" shiro-perms="user:recovery">还原</a>
+	</script>
+	<script id="cb" type="text/html">
+		<a class="layui-btn layui-btn-xs" lay-event="update" shiro-perms="user:update">修改</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete" shiro-perms="user:delete">删除</a>
+		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="password" shiro-perms="user:password">重置密码</a>
+		<a class="layui-btn layui-btn-xs" lay-event="res" shiro-perms="user:res">功能权限</a>
+	</script>
+	<script src="../../../lib/jquery/jquery.js"></script>
+	<script src="../../../lib/layout/jquery.ui.js"></script>
+	<script src="../../../lib/layout/jquery.layout.js"></script>
+	<script src="../../../lib/ztree/js/jquery.ztree.all.min.js"></script>
+	<script src="../../../lib/layuiadmin/layui/layui.js"></script>
+	<script src="../../../js/config.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('body').layout({
+				applyDemoStyles : true,
+				west : {
+					size : 200
+				},
+				center : {
+					minWidth : 800
+				}
+			});
+		});
+	</script>
+	<script>
+		layui.config({
+			base : '../../../lib/layuiadmin/'
+		}).extend({
+			xmSelect : 'lib/extend/xm-select',
+			common : 'js/common',
+			shiro : 'js/shiro'
+		}).use([ 'table', 'xmSelect', 'common', 'shiro' ], function() {
+			var organ_tree_json = layui.$.http.getJSON('/api/sys/organ/tree');
+			var organ_tree = layui.$.util.toObject(organ_tree_json, 'id', 'text');
+			var role_tree_json = layui.$.http.getJSON('/api/sys/role/tree');
+			var role_tree = layui.$.util.toObject(role_tree_json, 'id', 'text');
+			var flag_option_json = layui.$.http.getJSON('/api/dict/option/flag');
+			var flag_option = layui.$.util.toObject(flag_option_json, 'value', 'text');
+			var roleId = layui.xmSelect.render({
+				el : '#roleId',
+				name : 'roleId',
+				radio : true,
+				clickClose : true,
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					value : 'id',
+					name : 'text'
+				},
+				tree : {
+					show : true,
+					strict : false
+				},
+				data : layui.$.util.toTree(role_tree_json)
+			});
+			var locked = layui.xmSelect.render({
+				el : '#locked',
+				name : 'locked',
+				radio : true,
+				clickClose : true,
+				model : {
+					label : {
+						type : 'text'
+					}
+				},
+				prop : {
+					name : 'text',
+				},
+				data : flag_option_json
+			});
+			var tt = $.fn.zTree.init($("#tt"), {
+				data : {
+					simpleData : {
+						enable : true,
+						pIdKey : "pid",
+						rootPId : -1
+					},
+					key : {
+						name : "text"
+					}
+				},
+				view : {
+					showIcon : false,
+					autoCancelSelected : false,
+					selectedMulti : false
+				},
+				callback : {
+					onClick : function(event, treeId, treeNode) {
+						$('input[name="organId"]').val(treeNode.id);
+						layui.$('button[lay-submit]').click();
+					}
+				}
+			}, organ_tree_json);
+			tt.expandAll(true);
+			layui.table.render({
+				elem : '#dg',
+				toolbar : '#tb',
+				url : layui.$.http.baseUrl + '/api/sys/user/find',
+				method : 'post',
+				contentType : 'application/json',
+				page : true,
+				limit : 20,
+				limits : [ 10, 20, 50, 100, 200, 500, 1000 ],
+				request : {
+					pageName : 'page',
+					limitName : 'rows'
+				},
+				parseData : function(res) {
+					if (res.status == 0) {
+						return {
+							"code" : res.status,
+							"msg" : res.msg,
+							"count" : res.result.total,
+							"data" : res.result.list
+						};
+					} else if (res.status == 100) {
+						layui.$.gui.error(res.msg, function() {
+							layui.$.gui.toLogin();
+						});
+					} else {
+						layui.$.gui.error(res.msg);
+					}
+				},
+				done : function(res, curr, count) {
+					layui.$.shiro.render();
+				},
+				cols : [ [ {
+					fixed : 'left',
+					type : 'numbers'
+				}, {
+					field : 'account',
+					fixed : 'left',
+					title : '帐号',
+					width : 100,
+					sort : true
+				}, {
+					field : 'name',
+					fixed : 'left',
+					title : '姓名',
+					width : 100,
+					sort : true
+				}, {
+					field : 'organIds',
+					title : '机构',
+					width : 200,
+					templet : function(d) {
+						if (d.organIds) {
+							var arr = [];
+							for (var i = 0; i < d.organIds.length; i++) {
+								if (organ_tree[d.organIds[i]]) {
+									arr.push(organ_tree[d.organIds[i]]);
+								}
+							}
+							return arr.join(',');
+						} else {
+							return '';
+						}
+					}
+				}, {
+					field : 'roleIds',
+					title : '角色',
+					width : 200,
+					templet : function(d) {
+						if (d.roleIds) {
+							var arr = [];
+							for (var i = 0; i < d.roleIds.length; i++) {
+								if (role_tree[d.roleIds[i]]) {
+									arr.push(role_tree[d.roleIds[i]]);
+								}
+							}
+							return arr.join(',');
+						} else {
+							return '';
+						}
+					}
+				}, {
+					field : 'locked',
+					title : '锁定',
+					width : 80,
+					sort : true,
+					templet : function(d) {
+						if (flag_option[d.locked]) {
+							return flag_option[d.locked];
+						} else {
+							return '';
+						}
+					}
+				}, {
+					fixed : 'right',
+					title : '操作',
+					toolbar : '#cb',
+					width : 320,
+					align : 'center'
+				} ] ]
+			});
+			layui.table.on('toolbar(dg)', function(obj) {
+				switch (obj.event) {
+				case 'insert':
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'user_insert.html'
+					});
+					break;
+				case 'recovery':
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'user_recovery.html'
+					});
+					break;
+				}
+			});
+			layui.table.on('tool(dg)', function(obj) {
+				var row = obj.data;
+				if (obj.event == 'update') {
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'user_update.html?id=' + row.id
+					});
+				} else if (obj.event == 'delete') {
+					layui.$.gui.confirm('确定删除用户', function() {
+						layui.$.http.get({
+							url : '/api/web/sys/user/delete/' + row.id,
+							success : function(data) {
+								layui.$.gui.handle(data, function() {
+									layui.$('button[lay-submit]').click();
+								});
+							}
+						});
+					});
+				} else if (obj.event == 'password') {
+					layui.$.gui.confirm('确定重置密码', function() {
+						layui.$.http.get({
+							url : '/api/web/sys/user/password/' + row.id,
+							success : function(data) {
+								layui.$.gui.handle(data);
+							}
+						});
+					});
+				} else if (obj.event == 'res') {
+					layui.$.gui.open({
+						title : layui.$(this).text(),
+						url : 'user_res.html?id=' + row.id
+					});
+				}
+			});
+			layui.form.on('submit(find)', function(data) {
+				layui.table.reload('dg', {
+					where : layui.$.form.val('fm'),
+					page : {
+						curr : 1
+					}
+				});
+				return false;
+			});
+			layui.$('#reset').click(function(e) {
+				tt.cancelSelectedNode();
+				layui.$.form.reset('fm');
+			});
+			layui.$('.ui-layout-center').resize(function(e) {
+			});
+		});
+	</script>
+</body>
+</html>

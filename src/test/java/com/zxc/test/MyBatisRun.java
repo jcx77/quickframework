@@ -17,11 +17,11 @@ public class MyBatisRun {
     //项目包路径
     private static final String topPackage = "com.zxc.toolsproject.";
     //表名
-    private static final String tableName = "SYS_DICT_item";
-    private static final String modelPackage = "api.sys.model";
-    private static final String mapperPackage = "api.sys.mapper";
-    private static final String controllerPackage = "api.sys.controller";
-    private static final String servicePackage = "api.sys.service";
+    private static final String tableName = "SYS_USER_ORGAN";
+    private static final String modelPackage = "api.sys.user.model";
+    private static final String mapperPackage = "api.sys.user.mapper";
+    private static final String controllerPackage = "api.sys.user.controller";
+    private static final String servicePackage = "api.sys.user.service";
 
     //生成格式   topPackage + appPackage
 

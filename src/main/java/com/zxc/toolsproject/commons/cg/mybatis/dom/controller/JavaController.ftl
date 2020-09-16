@@ -27,7 +27,6 @@ public class ${data.className} {
     * @Author: xxx
     * @Date: ${data.date}
     */
-    //@AutoLog(value = "查询门类")
     @RequestMapping(value = "/find")
     public ResponseResult<PageList<${data.javaModel.className}>> find(@RequestBody @Validated Param Param) {
         return new ResponseResult<>(new PageList<>(${data.lowerServiceClassName}.find(Param)));
@@ -41,7 +40,6 @@ public class ${data.className} {
     * @Author: xxx
     * @Date: ${data.date}
     */
-    //@AutoLog(value = "添加门类")
     @RequestMapping(value = "/insert")
     //@RequiresPermissions("mlb:insert")
     public Response insert(@RequestBody @Validated ${data.javaModel.className} ${data.javaModel.lowerClassName}) {
@@ -57,7 +55,6 @@ public class ${data.className} {
     * @Author: xxx
     * @Date: ${data.date}
     */
-    //@AutoLog(value = "获取门类")
     @RequestMapping(value = "/get/{id}")
     public ResponseResult<${data.javaModel.className}> get(@PathVariable String id) {
         return new ResponseResult<>(${data.lowerServiceClassName}.get(id));
@@ -70,7 +67,6 @@ public class ${data.className} {
     * @Author: xxx
     * @Date: ${data.date}
     */
-    //@AutoLog(value = "更新门类")
     @RequestMapping(value = "/update")
     //@RequiresPermissions("zddyb:update")
     public Response update(@RequestBody @Validated ${data.javaModel.className} ${data.javaModel.lowerClassName}) {
@@ -86,7 +82,6 @@ public class ${data.className} {
     * @Author: xxx
     * @Date: ${data.date}
     */
-    //@AutoLog(value = "删除门类")
     @RequestMapping(value = "/delete/{id}")
     public Response delete(@PathVariable String id) {
         ${data.lowerServiceClassName}.delete(id);
