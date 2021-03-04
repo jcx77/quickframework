@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.framework.api.sys.role.mapper.SysRoleMapper">
+    <select id="findTree" resultType="com.framework.commons.vo.ui.TreeNode">
+        select id_ "id",
+        name_ "text",
+        pid_ "pid"
+        from sys_role
+        <where>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                and delete_flag = #{deleteFlag}
+            </if>
+        </where>
+        order by code_
+    </select>
+    <select id="findResTreeById" resultType="com.framework.commons.vo.ui.TreeNode">
+        select t1.id_ "id",
+        t1.name_ "text",
+        t1.pid_ "pid",
+        case when t2.res_id is null then '0' else '1' end "checked"
+        from sys_res t1
+        left join
+        (select res_id from sys_role_res where role_id = #{id}) t2
+        on t1.id_ = t2.res_id
+        where t1.show_ = '1'
+        AND t1.id_ not in((select id_ from sys_res  t  where t.pid_ in (select id_ from sys_res  a  where  a.show_ = '0')))
+        order by t1.sort_
+    </select>
+</mapper>

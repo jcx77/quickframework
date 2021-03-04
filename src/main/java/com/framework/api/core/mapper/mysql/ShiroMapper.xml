@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.framework.api.core.mapper.ShiroMapper">
+	<select id="getShiroUserById" resultType="com.framework.commons.shiro.subject.ShiroUser">
+		select id_ "id",
+		account_ "account",
+		password_ "password",
+		name_ "name",
+		locked_ "locked",
+		organ_id "organId",
+		(select code_ from sys_organ where id_=organ_id and delete_flag='0') "organCode",
+		(select name_ from sys_organ where id_=organ_id and delete_flag='0') "organName"
+		from sys_user
+		where delete_flag='0'
+		and id_=#{id}
+	</select>
+	<select id="findResourceAll" resultType="com.framework.commons.shiro.subject.Resource">
+		select id_ "id",
+		name_ "name",
+		icon_ "icon",
+		url_ "url",
+		pid_ "pid",
+		case when type_ = '1' then '1' else '0' end "menu"
+		from sys_res
+		where show_='1'
+		order by sort_
+	</select>
+	<select id="findResourceById" resultType="com.framework.commons.shiro.subject.Resource">
+		select distinct id_ "id",
+		name_ "name",
+		icon_ "icon",
+		url_ "url",
+		pid_ "pid",
+		 SORT_ "sort",
+		case when type_ = '1' then '1' else '0' end "menu"
+		from
+		((select t4.*
+		from sys_user_role t1,sys_role t2,sys_role_res t3,sys_res t4
+		where t1.role_id=t2.id_
+		and t2.id_=t3.role_id
+		and t3.res_id=t4.id_
+		and t2.delete_flag='0'
+		and t4.show_='1'
+		and t1.user_id=#{id})
+		union
+		(select t2.*
+		from sys_user_res t1,sys_res t2
+		where t1.res_id=t2.id_
+		and t2.show_='1'
+		and t1.user_id=#{id})) tt
+		order by "sort"
+	</select>
+</mapper>

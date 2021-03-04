@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.framework.api.sys.user.mapper.SysUserMapper">
+    <resultMap id="SysUser" type="com.framework.api.sys.user.model.SysUser">
+        <id column="ID_" property="id" jdbcType="VARCHAR" />
+        <result column="ACCOUNT_" property="account" jdbcType="VARCHAR" />
+        <result column="PASSWORD_" property="password" jdbcType="VARCHAR" />
+        <result column="NAME_" property="name" jdbcType="VARCHAR" />
+        <result column="XB" property="xb" jdbcType="VARCHAR" />
+        <result column="WHCD" property="whcd" jdbcType="VARCHAR" />
+        <result column="ZYWHCD" property="zywhcd" jdbcType="VARCHAR" />
+        <result column="ZYJSZW" property="zyjszw" jdbcType="VARCHAR" />
+        <result column="ZJLX" property="zjlx" jdbcType="VARCHAR" />
+        <result column="ZJHM" property="zjhm" jdbcType="VARCHAR" />
+        <result column="SJHM" property="sjhm" jdbcType="VARCHAR" />
+        <result column="CSRQ" property="csrq" jdbcType="TIMESTAMP" />
+        <result column="LOCKED_" property="locked" jdbcType="VARCHAR" />
+        <result column="ORGAN_ID" property="organId" jdbcType="VARCHAR" />
+        <result column="DATAID" property="dataid" jdbcType="VARCHAR" />
+        <result column="RYJB" property="ryjb" jdbcType="VARCHAR" />
+        <result column="QZQX" property="qzqx" jdbcType="VARCHAR" />
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+        <result column="CREATED_TIME" property="createdTime" jdbcType="TIMESTAMP" />
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+        <result column="UPDATED_TIME" property="updatedTime" jdbcType="TIMESTAMP" />
+        <result column="DELETE_FLAG" property="deleteFlag" jdbcType="CHAR" />
+        <collection column="ID_" property="organIds" select="findOrganId" />
+        <collection column="ID_" property="roleIds" select="findRoleId" />
+    </resultMap>
+    <sql id="Base_Column_List">
+		ID_, ACCOUNT_, PASSWORD_, NAME_, XB, WHCD, ZYWHCD, ZYJSZW, ZJLX, ZJHM, SJHM, CSRQ, ORGAN_ID, LOCKED_, DATAID,RYJB,QZQX, CREATED_BY, CREATED_TIME, UPDATED_BY, UPDATED_TIME, DELETE_FLAG
+	</sql>
+    <select id="findOrganId" resultType="string">
+		select t1.id_
+		from sys_organ t1,sys_user_organ t2
+		where t1.id_ = t2.organ_id
+		and t1.delete_flag = '0'
+		and t2.user_id = #{id}
+		order by t1.code_
+	</select>
+    <select id="findRoleId" resultType="string">
+		select t1.id_
+		from sys_role t1,sys_user_role t2
+		where t1.id_ = t2.role_id
+		and t1.delete_flag = '0'
+		and t2.user_id = #{id}
+		order by t1.code_
+	</select>
+    <select id="get" resultMap="SysUser">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user
+        where id_ = #{id}
+    </select>
+    <select id="find" resultMap="SysUser">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user
+        where id_ != 'admin'
+        <if test="account != null and account != ''">
+            and account_ like '%' || #{account} || '%'
+        </if>
+        <if test="name != null and name != ''">
+            and name_ like '%' || #{name} || '%'
+        </if>
+        <if test="locked != null and locked != ''">
+            and locked_ = #{locked}
+        </if>
+        <if test="organId != null and organId != ''">
+            and id_ in(select user_id from sys_user_organ where organ_id = #{organId})
+        </if>
+        <if test="roleId != null and roleId != ''">
+            and id_ in(select user_id from sys_user_role where role_id = #{roleId})
+        </if>
+        <if test="deleteFlag != null and deleteFlag != ''">
+            and delete_flag = #{deleteFlag}
+        </if>
+        order by account_
+    </select>
+    <select id="findResTreeById" resultType="com.framework.commons.vo.ui.TreeNode">
+		select t1.id_ "id",
+		t1.name_ "text",
+		t1.pid_ "pid",
+		case when t2.res_id is null then '0' else '1' end "checked"
+		from sys_res t1
+		left join
+		(select res_id from sys_user_res where user_id = #{id}) t2
+		on t1.id_ = t2.res_id
+		where t1.show_ = '1'
+		AND t1.id_ not in((select id_ from sys_res  t  where t.pid_ in (select id_ from sys_res  a  where  a.show_ = '0')))
+		order by t1.sort_
+	</select>
+    <select id="findOption" resultType="com.framework.commons.vo.ui.Option">
+        select id_ "value",
+        name_ "text"
+        from sys_user
+        <where>
+            <if test="deleteFlag != null and deleteFlag != ''">
+                and delete_flag = #{deleteFlag}
+            </if>
+        </where>
+        order by account_
+    </select>
+
+</mapper>
