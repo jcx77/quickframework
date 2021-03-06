@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfig {
 	private static final String[] CACHE_NAMES = { "shiro", "dict" };
 
-	@Bean
-	public CacheManager cacheManager() {
-		return new ConcurrentMapCacheManager(CACHE_NAMES);
-	}
+	//@Bean
+	//public CacheManager cacheManager() {
+	//	return new ConcurrentMapCacheManager(CACHE_NAMES);
+	//}
 
 	// @Bean
 //	public CacheManager cacheManager(LettuceConnectionFactory lettuceConnectionFactory) {

@@ -134,17 +134,6 @@ INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
 VALUES('log:find','系统日志','1',null,'sys/log/log_find.html',80,'1','sys');
 
 INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
-VALUES('seq:find','序列管理','1',null,'sys/seq/seq_find.html',90,'1','sys');
-INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
-VALUES('seq:insert','添加','2',null,null,1,'1','seq:find');
-INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
-VALUES('seq:update','修改','2',null,null,2,'1','seq:find');
-INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
-VALUES('seq:delete','删除','2',null,null,3,'1','seq:find');
-INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
-VALUES('seq:dtl:find','序列明细','2',null,null,4,'1','seq:find');
-
-INSERT INTO SYS_RES(ID_,NAME_,TYPE_,ICON_,URL_,SORT_,SHOW_,PID_)
 VALUES('report:designer','报表设计器','1',null,'sys/report/designer.html',200,'1','sys');
 
 INSERT INTO SYS_ORGAN(ID_,CODE_,NAME_,PID_,CREATED_BY,CREATED_TIME,DELETE_FLAG)
@@ -156,7 +145,3 @@ VALUES('admin','admin','df655ad8d3229f3269fad2a8bab59b6c','管理员','0','organ
 INSERT INTO SYS_USER_ORGAN(id_,user_id,organ_id)
 VALUES(replace(uuid(),'-',''),'admin','organ');
 
-INSERT INTO SYS_JOB(ID_,NAME_,CRON_,PARAM_,DESC_,STATUS_,CREATED_BY,CREATED_TIME,DELETE_FLAG)
-VALUES(replace(uuid(),'-',''),'org.sevensoft.jrdp.api.job.LogJob','0 0 0 1/1 * ? *','30','清理系统日志，参数为保留天数','0','admin',current_timestamp,'0');
-INSERT INTO SYS_JOB(ID_,NAME_,CRON_,PARAM_,DESC_,STATUS_,CREATED_BY,CREATED_TIME,DELETE_FLAG)
-VALUES(replace(uuid(),'-',''),'org.sevensoft.jrdp.api.job.JobLogJob','0 0 0 1/1 * ? *','30','清理任务日志，参数为保留天数','0','admin',current_timestamp,'0');

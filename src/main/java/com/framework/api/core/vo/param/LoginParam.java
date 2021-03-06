@@ -1,5 +1,6 @@
 package com.framework.api.core.vo.param;
 
+
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 

@@ -19,7 +19,7 @@ import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfigu
 import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfiguration;
 import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketServletAutoConfiguration;
 
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class, JdbcTemplateAutoConfiguration.class, RedisAutoConfiguration.class, RedisReactiveAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class, JmxAutoConfiguration.class, WebSocketServletAutoConfiguration.class, CacheAutoConfiguration.class, TaskSchedulingAutoConfiguration.class, TaskExecutionAutoConfiguration.class, RestTemplateAutoConfiguration.class, OAuth2ResourceServerAutoConfiguration.class, JacksonAutoConfiguration.class, FreeMarkerAutoConfiguration.class, HttpEncodingAutoConfiguration.class })
+@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class, JdbcTemplateAutoConfiguration.class,  RedisReactiveAutoConfiguration.class, RedisRepositoriesAutoConfiguration.class, JmxAutoConfiguration.class, WebSocketServletAutoConfiguration.class,  TaskSchedulingAutoConfiguration.class, TaskExecutionAutoConfiguration.class, RestTemplateAutoConfiguration.class, OAuth2ResourceServerAutoConfiguration.class, JacksonAutoConfiguration.class, FreeMarkerAutoConfiguration.class, HttpEncodingAutoConfiguration.class })
 //@Configurable //允许基于注解的配置
 public class QuickFrameworkApplication {
 //    /**

@@ -6,6 +6,7 @@ import com.framework.api.core.vo.result.LoginResult;
 import com.framework.api.core.vo.result.LoginUserResult;
 import com.framework.api.core.vo.ui.Param;
 import com.framework.api.sys.user.model.SysUser;
+import com.framework.api.test.vo.User;
 import com.framework.commons.exception.WebException;
 import com.framework.commons.log.AutoLog;
 import com.framework.commons.log.LogType;
@@ -18,6 +19,7 @@ import com.framework.commons.vo.response.ResponseResult;
 import com.framework.commons.vo.ui.Option;
 import com.framework.api.core.service.CoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +59,22 @@ public class CoreController {
         LoginResult loginResult = new LoginResult();
         loginResult.setToken(JwtUtils.sign(sysUser.getId(), sysUser.getPassword(), VALIDITY_TIME));
         AuditTools.setUserId(sysUser.getId());
+        contextLoads();
         return new ResponseResult<>("登录成功", loginResult);
+    }
+    @Autowired
+    public RedisTemplate redisTemplate;
+    /**
+    * @Description: TODO(redis测试代码)
+    * @Param: []
+    * @return: void
+    * @Author: zcx
+    * @Date: 2021/3/6 18:41
+    */
+    public void contextLoads() {
+        redisTemplate.opsForValue().set("1",new User("sd",2));
+        //redisTemplate.expire("1",3600, TimeUnit.SECONDS);
+        System.out.println(redisTemplate.opsForValue().get("1"));
     }
     @AutoLog(value = "修改登录密码")
     @RequestMapping(value = "/password", method = RequestMethod.POST)

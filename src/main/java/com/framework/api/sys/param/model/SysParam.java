@@ -1,9 +1,14 @@
 package com.framework.api.sys.param.model;
 
+
+
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Table(name = "sys_param")
