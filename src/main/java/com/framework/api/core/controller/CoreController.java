@@ -59,22 +59,22 @@ public class CoreController {
         LoginResult loginResult = new LoginResult();
         loginResult.setToken(JwtUtils.sign(sysUser.getId(), sysUser.getPassword(), VALIDITY_TIME));
         AuditTools.setUserId(sysUser.getId());
-        contextLoads();
+        //contextLoads();
         return new ResponseResult<>("登录成功", loginResult);
     }
-    @Autowired
-    public RedisTemplate redisTemplate;
+    //@Autowired
+    //public RedisTemplate redisTemplate;
     /**
     * @Description: TODO(redis测试代码)
     * @Param: []
     * @return: void
     * @Author: zcx
-    * @Date: 2021/3/6 18:41
+    * @Date: 2021/3/6 21:18
     */
     public void contextLoads() {
-        redisTemplate.opsForValue().set("1",new User("sd",2));
+        //redisTemplate.opsForValue().set("1",new User("sd",2));
         //redisTemplate.expire("1",3600, TimeUnit.SECONDS);
-        System.out.println(redisTemplate.opsForValue().get("1"));
+        //System.out.println(redisTemplate.opsForValue().get("1"));
     }
     @AutoLog(value = "修改登录密码")
     @RequestMapping(value = "/password", method = RequestMethod.POST)
